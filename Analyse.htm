@@ -1,0 +1,567 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>ezIGBT</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+<link rel="stylesheet" type="text/css" href="css/tabcontent.css" />
+
+<script type="text/javascript" src="scripts/jquery-1.9.1.js"> </script>
+<script type="text/javascript" src="scripts/script.js"></script>
+<link rel="stylesheet" type="text/css" href="scripts/popup.css" />
+
+<script src="scripts/jquery.min.js"></script>
+<script>
+    function setupLabel() {
+        if ($('.label_check input').length) {
+            $('.label_check').each(function(){ 
+                $(this).removeClass('c_on');
+            });
+            $('.label_check input:checked').each(function(){ 
+                $(this).parent('label').addClass('c_on');
+            });                
+        };
+        if ($('.label_radio input').length) {
+            $('.label_radio').each(function(){ 
+                $(this).removeClass('r_on');
+            });
+            $('.label_radio input:checked').each(function(){ 
+                $(this).parent('label').addClass('r_on');
+            });
+        };
+    };
+    $(document).ready(function(){
+        $('.label_check, .label_radio').click(function(){
+            setupLabel();
+        });
+        setupLabel(); 
+    });
+</script>
+
+<script type="text/javascript">
+jQuery(document).ready(function(e) {
+	jQuery('.subscript').on('click',function(){
+		jQuery(this).hide();
+		jQuery(this).prev().focus();
+	});
+	jQuery('.sub').on('blur',function(){
+		
+		var val = jQuery(this).val();
+		val = jQuery.trim(val);
+		if( val === '' ){
+			jQuery(this).next().show();
+			jQuery(this).val('');
+		}
+			
+	}); 
+	
+	jQuery('.custom-tabs li').on('click', function(){
+
+		jQuery('.tabcontent').hide();
+		var divID = jQuery(this).attr('rel');
+		jQuery('#'+divID).show();
+		jQuery('.custom-tabs li a').removeClass('selected');
+		jQuery('> a',this).addClass('selected');
+		
+	});
+});
+
+
+
+</script>
+</head>
+
+<body class="has-js">
+<!------container------>
+<div class="container1">
+	<!------header------>
+  	<div class="header">
+    	<div class="mid">
+    	<div class="logo"><a href="index.htm"><img src="images/logo.png" width="150" height="48" border="0" /></a></div>
+        <div class="nav">
+        	<ul>
+            	<li class="active"><a href="Analyse.htm">Analyse</a></li>
+                <li><a href="Compare.htm">Compare</a></li>
+                <li><a href="Recommend.htm">Recommend</a></li>
+            </ul>
+        </div>
+    	<div class="top-right">
+        	<ul class="topmenu">
+        	<li class=""><span class="login"><a href="Login.htm">Login</a></span></li>
+            <li class="last"><span class="signup"><a href="Signup.htm">Signup</a></span></li>
+            </ul>
+        </div>
+        </div>
+  	</div>
+    <!------header------>
+    
+    <!------content------>
+    <div class="tab-content tab">
+    	
+    	<div class="clear">
+		<div id="shadestabs" class="modernbricksmenu2">
+            <ul class="custom-tabs">
+                <li rel="tcontent1"><a href="#" rel="tcontent1" class="selected">Analyse Vce and Ets at my T<sub>j</sub></a></li>
+                <li rel="tcontent2"><a href="#" rel="tcontent2">P<sub>loss</sub> vs freq at my T<sub>j</sub>  and D</a></li>
+                <li rel="tcontent3"><a href="#" rel="tcontent3">What heatsink R<sub>th</sub> do I need?</a></li>
+                <li rel="tcontent4"><a href="#" rel="tcontent4">Show me the split in losses</a></li>
+                <li rel="tcontent5"><a href="#" rel="tcontent5">Calculate I vs f curve</a></li>
+            </ul>
+        </div>
+        <div class="tabcontentstyle">
+        
+        <div id="tcontent1" class="tabcontent analyse1" style="display:block;">
+        	<h2 class="center">Calculate Vce and Ets at my operating T<sub>j</sub></h2>
+            <div class="action">
+                <div class="line1">
+                <span class="fl marginR20"><select class="select" name="" size="1">
+                  <option>Choose an IGBT</option>
+                  <option>Choose an IGBT</option>
+                  <option>Choose an IGBT</option>
+                  <option>Choose an IGBT</option>
+                </select></span>
+                <span class="degr marginR20"><span class="rel"><input type="text" value="" class="sub" /><label class="subscript">My T<sub>j</sub> is =</label></span><small class="unit"><sup>o</sup>C</small></span>
+                
+                <span class="degr marginR20"><label class="">Plot this range:</label><span class="rel"><input type="text" value="" class="sub" /><label class="subscript">I<sub>min</sub></label></span><small class="unit">A</small></span>
+                
+                <span class="degr"><span class="rel"><input type="text" class="sub" value="" /><label class="subscript">I<sub>max</sub></label></span><small class="unit">A</small></span>
+                </div>
+                <div class="btn-grn plot">
+                    <span><a href="#">Plot</a></span>
+                </div>
+                
+            </div>
+            <div class="graph"><img src="images/analyse1.jpg"  /></div>
+            <div class="button-holder">
+                <span>
+                <div class="btn-blu marginR10">
+                    <span><a href="#" class="bug topopup">Report a bug</a></span>
+                </div>
+                </span>
+                <span>
+                <div class="btn-blu marginR10">
+                    <span><a href="#" class="download topopup_2">Download PDF</a></span>
+                </div>
+                </span>
+                <span>
+                <div class="btn-blu marginR10">
+                    <span><a href="#" class="download topopup_3">Download CSV</a></span>
+                </div>
+                </span>
+                <span>
+                <div class="btn-blu ">
+                    <span><a href="#" class="arrow topopup_4">Get Samples</a></span>
+                </div>
+                </span>
+            </div>
+        </div>
+        
+        <div id="tcontent2" class="tabcontent analyse2">
+        	<h2 class="center">Ploss vs freq at my T<sub>j</sub>  and D</h2>
+        	<div class="action">
+                <div class="line1">
+                <span class="fl marginR20"><select class="select" name="" size="1">
+                  <option>Choose an IGBT</option>
+                  <option>Choose an IGBT</option>
+                  <option>Choose an IGBT</option>
+                  <option>Choose an IGBT</option>
+                </select></span>
+                <span class="degr marginR20"><span class="rel"><input type="text" class="sub" value="" /><label class="subscript">My T<sub>j</sub> is</label></span><small class="unit"><sup>o</sup>C</small></span>
+                
+                <span class="degr marginR20"><input type="text" onblur="if(value==''){ value = 'My D is' }" 
+    onfocus="if(value=='My D is'){ value = '' }" value="My D is" /><small class="unit">%</small></span>
+                <span class="degr"><span class="rel"><input type="text" value="" class="sub" /><label class="subscript">My V<sub>dc</sub> is</label></span><small class="unit">V</small></span>
+                </div>
+                <div class="line2">
+                <span class="degr marginR20"><label class="">Plot this range:</label><span class="rel"><input type="text" value="" class="sub" /><label class="subscript">f<sub>min</sub></label></span><small class="unit">Hz</small></span>
+                
+                <span class="degr"><label class="">to</label><span class="rel"><input type="text" value="" class="sub" /><label class="subscript">f<sub>max</sub></label></span><small class="unit">Hz</small></span>
+                </div>
+                <div class="btn-grn plot">
+                    <span><a href="#">Plot</a></span>
+                </div>
+                
+            </div>
+            <div class="graph">
+            <div class="graphmap"><img src="images/analyse2.jpg" /></div>
+            <div class="btn-grn1 heatsink">
+            	<span><a href="#">Estimate my heatsink</a></span>
+            </div>
+            </div>
+            <div class="button-holder">
+                <span>
+                <div class="btn-blu marginR10">
+                    <span><a href="#" class="bug topopup">Report a bug</a></span>
+                </div>
+                </span>
+                <span>
+                <div class="btn-blu marginR10">
+                    <span><a href="#" class="download topopup_2">Download PDF</a></span>
+                </div>
+                </span>
+                <span>
+                <div class="btn-blu marginR10">
+                    <span><a href="#" class="download topopup_3">Download CSV</a></span>
+                </div>
+                </span>
+                <span>
+                <div class="btn-blu ">
+                    <span><a href="#" class="arrow topopup_4">Get Samples</a></span>
+                </div>
+                </span>
+            </div>
+        </div>
+        
+        <div id="tcontent3" class="tabcontent analyse3">
+        	<h2 class="center">What heatsink R<sub>th</sub> do I need?</h2>
+        	<div class="action">
+                <div class="line1">
+                <span class="fl marginR20"><select class="select" name="" size="1">
+                  <option>Choose an IGBT</option>
+                  <option>Choose an IGBT</option>
+                  <option>Choose an IGBT</option>
+                  <option>Choose an IGBT</option>
+                </select></span>
+                <span class="degr marginR20"><span class="rel"><input type="text" value="" class="sub" /><label class="subscript">My T<sub>j</sub> is</label></span><small class="unit"><sup>o</sup>C</small></span>
+                
+                <span class="degr marginR20"><input type="text" onblur="if(value==''){ value = 'My D is' }" 
+    onfocus="if(value=='My D is'){ value = '' }" value="My D is" /><small class="unit">%</small></span>
+                <span class="degr"><span class="rel"><input type="text" value="" class="sub" /><label class="subscript">My R<sub>thcs</sub> is</label></span><small class="unit"><sup>o</sup>C/w</small></span>
+                
+                </div>
+                <div class="line2">
+                
+                <span class="degr marginR20"><span class="rel"><input type="text" value="" class="sub" /><label class="subscript">My T<sub>amb</sub> is</label></span><small class="unit"><sup>o</sup>C</small></span>
+                
+                <span class="degr marginR20"><span class="rel"><input type="text" value="" class="sub" /><label class="subscript">My T<sub>sink</sub> is</label></span><small class="unit"><sup>o</sup>C</small></span>
+                <span class="degr"><span class="rel"><input type="text" value="" class="sub" /><label class="subscript">My V<sub>dc</sub> is</label></span><small class="unit">V</small></span>
+                </div>
+                <div class="line3">
+                <span class="degr marginR20"><label>Plot this range:</label><span class="rel"><input type="text" value="" class="sub" /><label class="subscript">f<sub>min</sub></label></span><small class="unit">Hz</small></span>
+                
+                <span class="degr"><span class="rel"><input type="text" value="" class="sub" /><label class="subscript">f<sub>max</sub></label></span><small class="unit">Hz</small></span>
+                </div>
+                <div class="btn-grn plot">
+                    <span><a href="#">Plot</a></span>
+                </div>
+                
+            </div>
+            <div class="graph">
+            <img src="images/analyse3.jpg" />
+            
+            </div>
+            <div class="button-holder">
+                <span>
+                <div class="btn-blu marginR10">
+                    <span><a href="#" class="bug topopup">Report a bug</a></span>
+                </div>
+                </span>
+                <span>
+                <div class="btn-blu marginR10">
+                    <span><a href="#" class="download topopup_2">Download PDF</a></span>
+                </div>
+                </span>
+                <span>
+                <div class="btn-blu marginR10">
+                    <span><a href="#" class="download topopup_3">Download CSV</a></span>
+                </div>
+                </span>
+                <span>
+                <div class="btn-blu ">
+                    <span><a href="#" class="arrow topopup_4">Get Samples</a></span>
+                </div>
+                </span>
+            </div>
+        </div>
+        
+        <div id="tcontent4" class="tabcontent analyse4">
+        	<h2 class="center">Show me the split in losses</h2>
+        	<div class="action">
+                <div class="line1">
+                <span class="fl marginR20"><select class="select" name="" size="1">
+                  <option>Choose an IGBT</option>
+                  <option>Choose an IGBT</option>
+                  <option>Choose an IGBT</option>
+                  <option>Choose an IGBT</option>
+                </select></span>
+                <span class="degr marginR20"><span class="rel"><input type="text" value="" class="sub" /><label class="subscript">My T<sub>j</sub> is</label></span><small class="unit"><sup>o</sup>C</small></span>
+                
+                <span class="degr marginR20"><input type="text" onblur="if(value==''){ value = 'My D is' }" 
+    onfocus="if(value=='My D is'){ value = '' }" value="My D is" /><small class="unit">%</small></span>
+                <span class="degr"><input type="text" onblur="if(value==''){ value = 'My f is' }" 
+    onfocus="if(value=='My f is'){ value = '' }" value="My f is" /><small class="unit">Hz</small></span>
+                
+                </div>
+                <div class="line2">
+                	<span class="degr"><span class="rel"><input type="text" value="" class="sub" /><label class="subscript">My V<sub>dc</sub> is</label></span><small class="unit">V</small></span>
+                </div>
+                <div class="btn-grn plot">
+                    <span><a href="#">Plot</a></span>
+                </div>
+                
+            </div>
+            <div class="graph">
+            <img src="images/analyse4.jpg" />
+            
+            </div>
+            <div class="button-holder">
+                <span>
+                <div class="btn-blu marginR10">
+                    <span><a href="#" class="bug topopup">Report a bug</a></span>
+                </div>
+                </span>
+                <span>
+                <div class="btn-blu marginR10">
+                    <span><a href="#" class="download topopup_2">Download PDF</a></span>
+                </div>
+                </span>
+                <span>
+                <div class="btn-blu marginR10">
+                    <span><a href="#" class="download topopup_3">Download CSV</a></span>
+                </div>
+                </span>
+                <span>
+                <div class="btn-blu ">
+                    <span><a href="#" class="arrow topopup_4">Get Samples</a></span>
+                </div>
+                </span>
+            </div>
+        </div>
+        
+        <div id="tcontent5" class="tabcontent analyse5">
+        	<h2 class="center">Calculate I vs f curve</h2>
+        	<div class="action">
+                <div class="line1">
+                <span class="fl marginR20"><select class="select" name="" size="1">
+                  <option>Choose an IGBT</option>
+                  <option>Choose an IGBT</option>
+                  <option>Choose an IGBT</option>
+                  <option>Choose an IGBT</option>
+                </select></span>
+                <span class="degr marginR20"><span class="rel"><input type="text" value="" class="sub" /><label class="subscript">My T<sub>j</sub> is</label></span><small class="unit"><sup>o</sup>C</small></span>
+                
+                <span class="degr marginR20"><input type="text" onblur="if(value==''){ value = 'My D is' }" 
+    onfocus="if(value=='My D is'){ value = '' }" value="My D is" /><small class="unit">%</small></span>
+                <span class="degr"><span class="rel"><input type="text" value="" class="sub" /><label class="subscript">My R<sub>thcs</sub> is</label></span><small class="unit"><sup>o</sup>C/w</small></span>
+                </div>
+                <div class="line2">
+                	<span class="degr marginR20"><span class="rel"><input type="text" value="" class="sub"/><label class="subscript">My V<sub>dc</sub> is</label></span><small class="unit">V</small></span>
+                <span class="degr"><span class="rel"><input type="text" class="sub" value="" /><label class="subscript">My T<sub>case</sub> is</label></span><small class="unit"><sup>o</sup>C</small></span>
+                </div>
+                <div class="line3">
+                <span class="degr marginR20"><label>Plot this range:</label><span class="rel"><input type="text" value="" class="sub" /><label class="subscript">f<sub>min</sub></label></span><small class="unit">Hz</small></span>
+                
+                <span class="degr"><span class="rel"><input type="text" value="" class="sub" /><label class="subscript">f<sub>max</sub></label></span><small class="unit">Hz</small></span>
+                </div>
+                <div class="btn-grn plot">
+                    <span><a href="#">Plot</a></span>
+                </div>
+                
+            </div>
+            <div class="graph">
+            <img src="images/analyse5.jpg" />
+            
+            </div>
+            <div class="button-holder">
+                <span>
+                <div class="btn-blu marginR10">
+                    <span><a href="#" class="bug topopup">Report a bug</a></span>
+                </div>
+                </span>
+                <span>
+                <div class="btn-blu marginR10">
+                    <span><a href="#" class="download topopup_2">Download PDF</a></span>
+                </div>
+                </span>
+                <span>
+                <div class="btn-blu marginR10">
+                    <span><a href="#" class="download topopup_3">Download CSV</a></span>
+                </div>
+                </span>
+                <span>
+                <div class="btn-blu ">
+                    <span><a href="#" class="arrow topopup_4">Get Samples</a></span>
+                </div>
+                </span>
+            </div>
+        </div>
+        
+        </div>
+        
+        </div>
+   	    
+    </div>
+    <!------content------>
+    
+    <!------footer------>
+    <div class="footer">
+    	<ul class="submenu">
+        	<li><a href="index.htm">Home</a></li>
+            <li><span>|</span></li>
+            <li><a href="How-It-Works.htm">How It Works</a></li>
+            <li><span>|</span></li>
+            <li><a href="Faq.htm">FAQ</a></li>
+            <li><span>|</span></li>
+            <li><a href="Contact-Us.htm">Contact Us</a></li>
+        </ul>
+    </div>
+    <!------footer------>
+</div>
+<!------container------>
+
+<!------Popup------>
+<div id="toPopup">
+	<div class="head">
+    	<div class="poplogo"></div>
+        <div class="error">
+        	<span class="fl"><img src="images/error.jpg" width="64" height="57" /></span>
+            <h3>Thank you for reporting a
+problem with the calculator!</h3>
+      </div>
+        <div class="close"></div>
+      <span class="ecs_tooltip">Press Esc to close <span class="arrow"></span></span>
+        </div>
+       	
+		<div id="popup_content"> <!--your content start-->
+        	<div class="bugreport-content">
+            <div class="clear">
+            	<div class="fl">
+                	<form>
+                   	  <p>
+                    	  <label class="label_radio r_on">
+                    	    <input type="radio" name="RadioGroup1" value="radio" checked="checked" id="RadioGroup1_0" />
+                    	    Part number is wrong</label>
+                   	    <br />
+                    	  <label class="label_radio">
+                    	    <input type="radio" name="RadioGroup1" value="radio" id="RadioGroup1_1" />
+                    	    calculated values are wrong</label>
+                   	    <br />
+                          <label class="label_radio">
+                    	    <input type="radio" name="RadioGroup1" value="radio" id="RadioGroup1_1" />
+                    	    graph axes incorrect</label>
+                    	  <br />
+                          <label class="label_radio">
+                    	    <input type="radio" name="RadioGroup1" value="radio" id="RadioGroup1_1" />
+                    	    problems with downloading files</label>
+                    	  <br />
+                          <label class="label_radio">
+                    	    <input type="radio" name="RadioGroup1" value="radio" id="RadioGroup1_1" />
+                    	    downloaded files do not match</label>
+                    	  <br />
+                          <label class="label_radio">
+                    	    <input type="radio" name="RadioGroup1" value="radio" id="RadioGroup1_1" />
+                    	    other</label>
+                    	  <br />
+                          
+                  	  </p>
+                    </form>
+                </div>
+                <div class="fc">and/or</div>
+                <div class="fr">
+                	<textarea cols="" rows="6">Describe the issue...</textarea>
+                    <p>My email is... (optional) so we can thank you and
+send updates on new tools</p>
+					<input name="" class="text" type="text" />
+                    <div class="btn-blu center">
+                    	<span><a href="#">Submit</a></span>
+                </div>
+              </div>
+            </div>
+			</div>
+        </div> <!--your content end-->
+    
+    </div>
+<div id="toPopup_2">
+	<div class="head">
+    	<div class="poplogo"></div>
+        <div class="close"></div>
+        <span class="ecs_tooltip">Press Esc to close <span class="arrow"></span></span>
+        </div>
+       	
+		<div id="popup_content"> <!--your content start-->
+        	<div class="download-content">
+            <p>
+            To be able to download the files,<br />
+you will need to<br />
+‘Subscribe to Updates’<br />
+If you have done this already,<br /> 
+either enter your email-id here<br />
+or<br />
+login on the homepage<br />
+
+<small>Thank you for using ezIGBT!</small></p>
+			<div class="clear">
+            	<span class="fl"><input class="text" name="" onblur="if(value=='') value = 'Enter Email Id'" 
+    onfocus="if(value=='Enter Email Id') value = ''" value="Enter Email Id" type="text" /></span>
+                <span class="fr"><div class="btn-blu">
+                    <span><a href="#">GO</a></span>
+                </div></span>
+            </div>
+			</div>
+        </div> <!--your content end-->
+    
+    </div>
+<div id="toPopup_3">
+	<div class="head">
+    	<div class="poplogo"></div>
+        <div class="close"></div>
+        <span class="ecs_tooltip">Press Esc to close <span class="arrow"></span></span>
+        </div>
+       	
+		<div id="popup_content"> <!--your content start-->
+        	<div class="download-content">
+            <p>
+            To be able to download the files,<br />
+you will need to<br />
+‘Subscribe to Updates’<br />
+If you have done this already,<br /> 
+either enter your email-id here<br />
+or<br />
+login on the homepage<br />
+
+<small>Thank you for using ezIGBT!</small></p>
+			<div class="clear">
+            	<span class="fl"><input class="text" name="" onblur="if(value=='') value = 'Enter Email Id'" 
+    onfocus="if(value=='Enter Email Id') value = ''" value="Enter Email Id" type="text" /></span>
+                <span class="fr"><div class="btn-blu">
+                    <span><a href="#">GO</a></span>
+                </div></span>
+            </div>
+			</div>
+        </div> <!--your content end-->
+    
+    </div>
+<div id="toPopup_4">
+	<div class="head">
+    	<div class="poplogo"></div>
+        <div class="close"></div>
+        <span class="ecs_tooltip">Press Esc to close <span class="arrow"></span></span>
+        </div>
+       	
+		<div id="popup_content"> <!--your content start-->
+        	<div class="comingsoon-content">
+            <h3>We are Sorry</h3>
+            <p>
+            The feature you have chosen is in development.<br />
+It will be available soon...<br /><br />
+
+you can choose to ‘Subscribe to Updates’ to be notified when it is ready.</p>
+			<div class="clear">
+            	<div><input class="text" name="" onblur="if(value=='') value = 'Email Id'" 
+    onfocus="if(value=='Email Id') value = ''" value="Email Id" type="text" /></div>
+                <div class="btn-blu center">
+                    <span><a href="#">Subscribe to Updates</a></span>
+                </div>
+            </div>
+			</div>
+        </div> <!--your content end-->
+    
+    </div>
+
+<div class="loader"></div>
+<div id="backgroundPopup"></div>
+<!------Popup------>
+</body>
+</html>

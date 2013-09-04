@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>ezIGBT</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+<script type="text/javascript" src="scripts/animatedcollapse.js">
+
+/***********************************************
+* Animated Collapsible DIV v2.4- (c) Dynamic Drive DHTML code library (www.dynamicdrive.com)
+* This notice MUST stay intact for legal use
+* Visit Dynamic Drive at http://www.dynamicdrive.com/ for this script and 100s more
+***********************************************/
+
+</script>
+
+
+<script type="text/javascript">
+
+animatedcollapse.addDiv('cat', 'fade=0,speed=400,group=pets')
+animatedcollapse.addDiv('dog', 'fade=0,speed=400,group=pets,persist=1,hide=1')
+animatedcollapse.addDiv('rabbit', 'fade=0,speed=400,group=pets,hide=1')
+
+animatedcollapse.ontoggle=function($, divobj, state){ //fires each time a DIV is expanded/contracted
+	//$: Access to jQuery
+	//divobj: DOM reference to DIV being expanded/ collapsed. Use "divobj.id" to get its ID
+	//state: "block" or "none", depending on state
+}
+
+animatedcollapse.init()
+
+</script>
+</head>
+
+<body>
+<!------container------>
+<div class="container">
+	<!------header------>
+  	<div class="header">
+    	<div class="mid">
+    	<div class="logo"><a href="index.htm"><img src="images/logo.png" width="150" height="48" border="0" /></a></div>
+        <div class="nav">
+        	<ul>
+            	<li class=""><a href="Analyse.htm">Analyse</a></li>
+                <li><a href="Compare.htm">Compare</a></li>
+                <li><a href="Recommend.htm">Recommend</a></li>
+            </ul>
+        </div>
+    	<div class="top-right">
+        	<ul class="topmenu">
+        	<li><span class="login"><a href="Login.htm">Login</a></span></li>
+            <li class="last"><span class="signup"><a href="Signup.htm">Signup</a></span></li>
+            </ul>
+        </div>
+        </div>
+  	</div>
+    <!------header------>
+    
+    <!------content------>
+    <div class="content faq">
+    	
+    	<h1>FAQ (Frequently Asked Questions)</h1>
+        <div id="questions">
+       	  <ul>
+          	<li><span><a href="#" rel="toggle[cat]" data-openimage="images/minus.jpg" data-closedimage="images/plus.jpg"><img src="images/plus.jpg" border="0"></a></span></span><a href="#" rel="toggle[cat]">What is the aim of this site?</a>
+            <div id="cat">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque risus sapien, viverra ac pellentesque eu, ultricies vel leo. Suspendisse non ultrices diam. Cras venenatis congue nulla quis vestibulum. Suspendisse vestibulum, purus non dictum rutrum, elit mi aliquam velit, vel bibendum orci massa vel nunc. Sed hendrerit mi at quam convallis cursus. Sed ut lobortis ligula, at viverra elit. Nunc in dignissim sapien. Proin quis felis purus.</p>
+            </div>
+            </li>
+            <li><span><a href="#" rel="toggle[dog]" data-openimage="images/minus.jpg" data-closedimage="images/plus.jpg"><img src="images/minus.jpg" border="0"></a></span></span><a href="#" rel="toggle[dog]">What is my password and can I change it?
+</a>
+            <div id="dog">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque risus sapien, viverra ac pellentesque eu, ultricies vel leo. Suspendisse non ultrices diam. Cras venenatis congue nulla quis vestibulum. Suspendisse vestibulum, purus non dictum rutrum, elit mi aliquam velit, vel bibendum orci massa vel nunc. Sed hendrerit mi at quam convallis cursus. Sed ut lobortis ligula, at viverra elit. Nunc in dignissim sapien. Proin quis felis purus.</p>
+            </div>
+            </li>
+            <li><span class="plus"><a href="#" rel="toggle[rabbit]" data-openimage="images/minus.jpg" data-closedimage="images/plus.jpg"><img src="images/minus.jpg" border="0"></a></span></span><a href="#" rel="toggle[rabbit]">What is my password and can I change it?
+</a>
+            <div id="rabbit">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque risus sapien, viverra ac pellentesque eu, ultricies vel leo. Suspendisse non ultrices diam. Cras venenatis congue nulla quis vestibulum. Suspendisse vestibulum, purus non dictum rutrum, elit mi aliquam velit, vel bibendum orci massa vel nunc. Sed hendrerit mi at quam convallis cursus. Sed ut lobortis ligula, at viverra elit. Nunc in dignissim sapien. Proin quis felis purus.</p>
+            </div>
+            </li>
+            
+          </ul>
+        </div>
+        
+    </div>
+    <!------content------>
+    
+    <!------footer------>
+    <div class="footer">
+    	<ul class="submenu">
+        	<li><a href="index.htm">Home</a></li>
+            <li><span>|</span></li>
+            <li><a href="How-It-Works.htm">How It Works</a></li>
+            <li><span>|</span></li>
+            <li><a href="Faq.htm">FAQ</a></li>
+            <li><span>|</span></li>
+            <li><a href="Contact-Us.htm">Contact Us</a></li>
+        </ul>
+    </div>
+    <!------footer------>
+</div>
+<!------container------>
+</body>
+</html>
