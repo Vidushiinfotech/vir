@@ -1,0 +1,26 @@
+/**************** TRIAL AREA **************************/
+/*
+$fhandle = fopen( EZ_BASE_PATH.'uploads'.EZ_SLASHES.'users123.csv', 'r+' );
+
+    $counter = 1;
+
+    while( $data = fgetcsv($fhandle,1000,",","'") ) {
+        
+        $id = '';
+        $username = $data[0];
+        $fname = $data[1];
+        $lname = $data[2];
+        $email = $data[3];
+        $admin = $data[4];
+        $psw = md5('123456');
+        
+        $query = "insert into users values ( '$id', '$username', '$fname', '$lname', '$psw', '$email', '$admin' )";
+        
+        $res = $EZ_DB->run_query( $query );
+        $counter++;
+
+    }
+
+echo $counter++;
+die;
+/**************** TRIAL AREA **************************/

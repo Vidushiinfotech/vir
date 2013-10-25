@@ -4,8 +4,15 @@
  * This file load the whole site
  */
 
-/* require config file */
-require_once 'config.php';
+/* Load all connection and other files */
+ini_set('display_errors', 1);
+require_once 'includes/init.php';
 
-/* Load the site */
-include 'includes/init.php';
+//Dispaly header
+get_site_header();
+
+//Display template
+$Router->loader();
+
+//Display footer
+get_site_footer();
