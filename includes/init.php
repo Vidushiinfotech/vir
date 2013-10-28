@@ -4,10 +4,16 @@
  * initialize and create objects
  */
 
-global $Router;
+global $Router, $EZ_DB;
 
 /* Include the classes */
-include EZ_BASE_PATH . '/includes/Router.php';
+require './config.php';
+require_once EZ_BASE_PATH . 'includes/EZ_DB.php';
+require_once EZ_BASE_PATH . 'includes/Router.php';
 
 /* Create instance */
+$EZ_DB = new EZ_DB();
 $Router = new Router();
+
+//Include function file
+require_once EZ_BASE_PATH . 'includes/global-functions.php';
