@@ -137,21 +137,13 @@ class EZ_DB {
             // Create user table
             if (  empty($table_exist['users']) ) {
 
-                $query_return = $this->run_query("CREATE TABLE users ( ID MEDIUMINT NOT NULL AUTO_INCREMENT,
-                                                    username varchar(50) NOT NULL, password varchar(100),
-                                                    fname fname VARCHAR(50) NULL,
-                                                    lname VARCHAR(50) NULL,
-                                                    user_email varchar(100) UNIQUE NOT NULL, primary key(ID) ),
-                                                    is_admin TINYINT NOT NULL DEFAULT '1'
-                                                ");
+                $query_return = $this->run_query("CREATE TABLE users ( ID MEDIUMINT NOT NULL AUTO_INCREMENT, username varchar(50) NOT NULL, password varchar(100), fname VARCHAR(50) NULL, lname VARCHAR(50) NULL, user_email varchar(100) UNIQUE NOT NULL, is_admin TINYINT NOT NULL DEFAULT '1', is_subscriber TINYINT NOT NULL DEFAULT '0' primary key (ID) );");
             }
 
             // Create configuration table
             if ( empty($table_exist['config']) ) {
 
-                $query_return = $this->run_query("CREATE TABLE config ( key_name varchar ( 100 ),
-                                                    key_value varchar(500) )");
-
+                $query_return = $this->run_query("CREATE TABLE config ( key_name varchar ( 100 ), key_value varchar(500) )");
             }
 
             // Create pages table
@@ -175,8 +167,7 @@ class EZ_DB {
                                                     package VARCHAR( 100 ) NULL ,
                                                     rthjc_igbt FLOAT NULL ,
                                                     rthjc_diode FLOAT NULL ,
-                                                    rthid FLOAT NULL ,
-                                                    rthdi FLOAT NULL ,
+                                                    rthcs FLOAT NULL ,
                                                     tjref INT NULL ,
                                                     vref INT NULL ,
                                                     eontjmax FLOAT NULL ,

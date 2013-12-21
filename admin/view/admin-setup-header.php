@@ -8,6 +8,7 @@ if (!defined('EZ_BASE_PATH')) die('No access!'); //exit if access directly!  ?>
     <head>
         <title><?php echo $page_title; ?></title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta name="viewport" content="width=1024" />
         <style type="text/css" media="all">
             * { margin: 0; padding: 0; }
             body { font-family: sans-serif; font-size: 100%; line-height: 150%; color: #444; }
@@ -28,7 +29,7 @@ if (!defined('EZ_BASE_PATH')) die('No access!'); //exit if access directly!  ?>
     <body>
         <div id="admin-header">
             <h1 class="logo">
-                <img src="<?php echo VIT_IMG ?>/logo.png" width="150" height="48" border="0" />
+                <img src="../assets/img/logo.png" width="150" height="48" border="0" />
             </h1>
         </div>
         <h2 class="page-heading">Setup Site</h2>

@@ -8,6 +8,7 @@ if (!defined('EZ_BASE_PATH')) die('No access!'); //exit if access directly! ?>
 
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="viewport" content="width=1024" />
         <title><?php echo get_site_title(); echo !empty($page_title) ? ' - ' . $page_title : ''; ?></title>
         <link rel="icon" href="<?php echo return_site_url(); ?>images/favicon.ico" type="image/x-icon"/>
         <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css' />

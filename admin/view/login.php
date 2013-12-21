@@ -20,9 +20,12 @@ if (isset($_POST['submit'])) {
     );
 
     foreach ($fields as $key => $val) {
+
         if (!isset($_POST[$key]) || empty($_POST[$key])) {
+
             $error = true;
             $msg .= "$val can not be empty.<br />";
+
         }
     }
 
@@ -31,6 +34,9 @@ if (isset($_POST['submit'])) {
 
         $username = mysqli_real_escape_string( $EZ_DB->connect, $_POST['username'] );
         $password = md5( mysqli_real_escape_string( $EZ_DB->connect, $_POST['password'] ) );
+
+        //db( "SELECT * FROM users WHERE username ='".$username."' AND password = '". $password ."'" );
+        
         $result = $EZ_DB->run_query("SELECT * FROM users WHERE username ='".$username."' AND password = '". $password ."'");
 
         if ($result) {
@@ -42,7 +48,7 @@ if (isset($_POST['submit'])) {
 
                 $_SESSION['user_id'] = $result['ID'];
                 $_SESSION['capability'] = 'admin';
-                
+
                 $admin = return_site_url().'admin';
 
                 header("Location:$admin");

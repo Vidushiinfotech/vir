@@ -10,7 +10,7 @@ require_once '../config.php';
 if( empty( $_GET['site'] ) || empty( $_GET['file'] ) ){ die('Invalid Request'); }
 
 /* Valid Extensions */
-$validExt = array( 'csv', 'xls' );
+$validExt = array( 'csv', 'xls', 'pdf' );
 
 $fileName = $_GET['file'];
 $uploadedFile = $fileName;
@@ -57,8 +57,12 @@ if ( in_array( end( $fileName ), array( 'csv' ) ) ){
 
     header('Content-Type: application/vnd.ms-excel');
 
+}elseif( in_array( end( $fileName ), array( 'pdf' ) ) ){
+
+    header('Content-Type: application/pdf');
+    header("Content-Type: application/force-download");
 }
-header('Content-Disposition:attachment;filename='.  basename( $filename ) );
+header('Content-Disposition:attachment;filename='.  reset($fileName).'_'.date("Y_m_d.").end($fileName) );
 header('Pragma: no-cache');
 readfile( $filename );
 exit();

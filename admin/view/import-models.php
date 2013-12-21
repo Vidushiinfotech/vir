@@ -33,31 +33,30 @@ if( isset( $_POST['submit'] ) ) {
                 while( $data = fgetcsv($fhandle,1000,",","'") ) {
 
                     if ($counter != 1) {
-                        
-                        
+
                     /* 
                      * First check if the model is already present in the database if so update it
                      * Else Enter the new model record into the database
                      */
-                    $modelQuery =   "SELECT * FROM models WHERE model_name='$data[0]]'";
+                    $modelQuery =   "SELECT * FROM models WHERE model_name='$data[0]'";
                     $result     =   $EZ_DB->run_query( $modelQuery, 0 );
-
+                    
                     if( !$result ){
 
                     $result = $EZ_DB->run_query( "INSERT INTO models VALUES ( '". trim($data[0]) ."', '".$data[1]."', '".$data[2]."', '".$data[3]."', '".$data[4]."', 
-                            '".$data[5]."', '".$data[6]."', '".$data[7]."', '".$data[8]."', '".$data[9]."', '".$data[10]."', '".$data[11]."', 
-                            '".$data[12]."', '$data[13]', '$data[14]', '$data[15]', '$data[16]','$data[17]', '$data[18]', '$data[19]', '$data[20]',
-                                '$data[21]', '$data[22]', '$data[23]', '$data[24]','$data[25]', '$data[26]', '$data[27]', '$data[28]',
-                                    '$data[29]', '$data[30]', '$data[31]', '$data[32]','$data[33]', '$data[34]', '$data[35]', '$data[36]',
-                                        '$data[37]', '$data[38]', '$data[39]', '$data[40]','$data[41]', '$data[42]', '$data[43]', '$data[44]')" );
+                            '".$data[5]."', '".$data[6]."', '".$data[7]."', '".$data[8]."', '".$data[9]."', '".$data[10]."', 
+                            '".$data[11]."', '$data[12]', '$data[13]', '$data[14]', '$data[15]','$data[16]', '$data[17]', '$data[18]', '$data[19]',
+                                '$data[20]', '$data[21]', '$data[22]', '$data[23]','$data[24]', '$data[25]', '$data[26]', '$data[27]',
+                                    '$data[28]', '$data[29]', '$data[30]', '$data[31]','$data[32]', '$data[33]', '$data[34]', '$data[35]',
+                                        '$data[36]', '$data[37]', '$data[38]', '$data[39]','$data[40]', '$data[41]', '$data[42]', '$data[43]')" );
                     }else{
 
                     $result = $EZ_DB->run_query( "UPDATE models SET  v_rated='".$data[1]."', i_rated='".$data[2]."', package='".$data[3]."', rthjc_igbt='".$data[4]."', 
-                            rthjc_diode='".$data[5]."', rthid='".$data[6]."', rthdi='".$data[7]."', tjref='".$data[8]."', vref='".$data[9]."', eontjmax='".$data[10]."', htjmax='".$data[11]."', 
-                            ktjmax='".$data[12]."', xtjmax='$data[13]', eofftjmax='$data[14]', mtjmax='$data[15]', ntjmax='$data[16]', ytjmax='$data[17]', vttjmax='$data[18]', atjmax='$data[19]', btjmax='$data[20]',
-                                er0tjmax='$data[21]', d1tjmax='$data[22]', d2tjmax='$data[23]', vtdtjmax='$data[24]',adtjmax='$data[25]', bdtjmax='$data[26]', eon='$data[27]', h='$data[28]',
-                                    k='$data[29]', x='$data[30]', eoff='$data[31]', m='$data[32]',n='$data[33]', y='$data[34]', vt='$data[35]', a='$data[36]',
-                                        b='$data[37]', er0='$data[38]', d1='$data[39]', d2='$data[40]',vdt='$data[41]', ad='$data[42]', bd='$data[43]', include_model='$data[44]' WHERE model_name='". trim($data[0]) ."]'" );
+                            rthjc_diode='".$data[5]."', rthid='".$data[6]."', tjref='".$data[7]."', vref='".$data[8]."', eontjmax='".$data[9]."', htjmax='".$data[10]."', 
+                            ktjmax='".$data[11]."', xtjmax='$data[12]', eofftjmax='$data[13]', mtjmax='$data[14]', ntjmax='$data[15]', ytjmax='$data[16]', vttjmax='$data[17]', atjmax='$data[18]', btjmax='$data[19]',
+                                er0tjmax='$data[20]', d1tjmax='$data[21]', d2tjmax='$data[22]', vtdtjmax='$data[23]',adtjmax='$data[24]', bdtjmax='$data[25]', eon='$data[26]', h='$data[27]',
+                                    k='$data[28]', x='$data[29]', eoff='$data[30]', m='$data[31]',n='$data[32]', y='$data[33]', vt='$data[34]', a='$data[35]',
+                                        b='$data[36]', er0='$data[37]', d1='$data[38]', d2='$data[39]',vdt='$data[40]', ad='$data[41]', bd='$data[42]', include_model='$data[43]' WHERE model_name='". trim($data[0]) ."'" );
 
                     }
 
@@ -65,7 +64,7 @@ if( isset( $_POST['submit'] ) ) {
                             $rows++;
 
                     }
-                $counter++;
+                    $counter++;
 
                 }
 
@@ -75,10 +74,11 @@ if( isset( $_POST['submit'] ) ) {
         }
 
     } else {
+
         $error = TRUE;
         $msg = 'Please Upload CSV File! <br />';
-    }
 
+    }
 }
 
 if ($rows || $msg) {

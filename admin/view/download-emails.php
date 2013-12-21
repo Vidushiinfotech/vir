@@ -61,8 +61,15 @@ if( $_GET['format'] == 'xls' ){
 
     while( $row = mysqli_fetch_assoc( $result ) ){
 
-        $col = 'A'.$count;
-        $objPHPExcel->setActiveSheetIndex(0)->setCellValue( $col, $row['user_email'] );
+        if( $row['is_subscriber'] )
+            $userType = 'subscriber';
+        else
+            $userType = 'user';
+
+        $col1 = 'A'.$count;
+        $col2 = 'B'.$count;
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue( $col1, $row['user_email'] );
+        $objPHPExcel->setActiveSheetIndex(0)->setCellValue( $col2, $userType );
 
         $count++;
     }

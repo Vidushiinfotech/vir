@@ -8,6 +8,7 @@ if( !session_id() )
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=1024" />
         <meta name='robots' content='noindex,nofollow' /><!-- Remove after development -->
 
         <title><?php echo get_page_title() ? get_page_title() . " - " : ''; echo get_site_title();  ?></title>
@@ -17,7 +18,11 @@ if( !session_id() )
         <link href="<?php echo return_site_url(); ?>assets/css/style_old.css" rel="stylesheet" type="text/css"  /><!-- Remove after development -->
         <link href="<?php echo return_site_url(); ?>assets/css/style.css" rel="stylesheet" type="text/css" />
 
-        <script type="text/javascript" src="<?php echo return_site_url(); ?>assets/js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="<?php echo return_site_url(); ?>assets/js/jquery-1.10.2.js"></script><!-- Remove after development -->
+        <script type="text/javascript" src="<?php echo return_site_url(); ?>assets/js/canvas2image.js"></script>
+        <script type="text/javascript" src="<?php echo return_site_url(); ?>assets/js/base64.js"></script>
+        <script type="text/javascript" src="http://html2canvas.hertzen.com/build/html2canvas.js"></script>
+        <!-- Scripts in development mode -->
 
         <!--[if lt IE 9]>
             <script src="<?php echo return_site_url().'admin/js/html5.js' ?>"></script>
@@ -26,23 +31,23 @@ if( !session_id() )
         if ( is_graph_page() ){ ?>
 
             <!-- Style sheet for selectbox -->
-            <link href="<?php echo return_site_url(); ?>assets/css/fancyfields.css" rel="stylesheet" type="text/css" />
+            <link href="<?php echo return_site_url(); ?>admin/external-libs/fancyselect/chosen.css" rel="stylesheet" type="text/css" />
 
-            <!-- Scripts for custom selectbox -->
-            <script type="text/javascript" src="<?php echo return_site_url(); ?>assets/js/jquery-ui.js"></script><!-- Remove after development -->
-            <script type="text/javascript" src="<?php echo return_site_url(); ?>assets/js/fancyfield.js"></script><!-- Remove after development -->
-            <!-- Scripts for custom selectbox -->
-            
+            <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="<?php echo return_site_url(); ?>assets/js/excanvas.min.js"></script><![endif]-->
             <script type="text/javascript" src="<?php echo return_site_url(); ?>admin/external-libs/flot/jquery.flot.js"></script> 
-            <script type="text/javascript" src="<?php echo return_site_url(); ?>assets/js/graph-custom-script.js"></script><?php 
+            <script type="text/javascript" src="<?php echo return_site_url(); ?>assets/js/graph-custom-script.js"></script>
+            <script type="text/javascript" src="<?php echo return_site_url(); ?>admin/external-libs/fancyselect/chosen.jquery.min.js"></script> 
+            <script type="text/javascript" src="<?php echo return_site_url(); ?>assets/js/action-buttons.js"></script><?php 
+
         } ?>
             
         <script type="text/javascript" src="<?php echo return_site_url(); ?>assets/js/custom-script.js"></script>
-
+      
 
         <script type="text/javascript">
             var ajaxurl = '<?php echo return_site_url().'admin/ajax.php'; ?>';
             var graph_ajaxurl = '<?php echo return_site_url().'admin/graph-ajax.php'; ?>';
+            var savePDF = '<?php echo return_site_url().'additional/testSave.php'; ?>';
             var loader  = '<?php echo VIT_IMG.'/loader.gif' ?>';
         </script>
 

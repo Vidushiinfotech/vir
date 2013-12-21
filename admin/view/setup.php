@@ -35,12 +35,12 @@ if (isset($_POST['submit'])) {
             $error = true;
             $msg .= 'Username can only be alphanumeric with/without underscores and minimum length of four characters.<br />';
         }
-        
+
         if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
             $error = true;
             $msg .= 'Please enter a valid email.<br />';
         }
-        
+
         if ($_POST['pwd'] !== $_POST['pwd2']) {
             $error = true;
             $msg .= 'Please enter the same password in both password fields.<br />';
@@ -63,8 +63,9 @@ if (isset($_POST['submit'])) {
                 $msg .= 'This email address already exist.<br />';
             }
         }
-        
+
         if (!$error) {
+
             $username = mysqli_real_escape_string( $EZ_DB->connect, $_POST['username'] );
             $email = mysqli_real_escape_string($EZ_DB->connect, $_POST['email']);
             $password = md5(mysqli_real_escape_string( $EZ_DB->connect, $_POST['pwd']) );
@@ -74,11 +75,11 @@ if (isset($_POST['submit'])) {
             $temp_url = "http://$_SERVER[HTTP_HOST]$_SERVER[PHP_SELF]";
             $temp_url2 = str_replace('index.php', '', $temp_url);
             $site_url = (str_replace('admin/', '', $temp_url2));
-
-            $result = $EZ_DB->run_query("INSERT INTO users VALUES ( '', '".$username."', '', '', '". $password ."', '".$email."', '1'  )");
+            //db("INSERT INTO users VALUES ( '', '".$username."', '". $password ."', '', '', '".$email."', '1'  )");
+            $result = $EZ_DB->run_query("INSERT INTO users VALUES ( '', '".$username."', '". $password ."', '', '', '".$email."', '1', '0'  )");
             $result2 = $EZ_DB->run_query("INSERT INTO config VALUES ( 'site_title', '".$site_title."')");
             $result3 = $EZ_DB->run_query("INSERT INTO config VALUES ( 'site_url', '".$site_url."')");
-            
+
             if (!$result || !$result2 || !$result3) {
                 $error = true;
                 $msg .= 'Error!<br />';
