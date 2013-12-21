@@ -8,13 +8,13 @@ $featuresArray = array(
     0=>'Analyze VCE & ETS at my TJ',
     1=>'Ploss vs. Frequency Curve at my Tj',
     2=>'What Heat sink RTH do I need?',
-    3=>'Calculate Irms vs. Frequency',
-    4=>'Show me the split in losses',
+    3=>'Show me the split in losses',
+    4=>'Calculate Irms vs. Frequency',
     5=>'Compare 3 IGBTs for VCE & ETS',
     6=>'Compare Ploss vs. frequency for 3 IGBTs',
-    7=>'Compare Irms vs. Frequency for 3 IGBTs',
-    8=>'What HS RTH do I need for 3 IGBTs?',
-    9=>'Compare split in losses for 3 IGBTs',
+    7=>'What HS RTH do I need for 3 IGBTs?',
+    8=>'Compare split in losses for 3 IGBTs',
+    9=>'Compare Irms vs. Frequency for 3 IGBTs',
    10=>'Recommend IGBTs for my Application',
 );
 ?>
@@ -39,12 +39,19 @@ $featuresArray = array(
                 <div class="col on-off heading"><strong>Activate / Deactivate</strong></div>
             </div><?php
 
-            $query      =   "SELECT key_value FROM config WHERE key_name ='features_status'";
-            $results    =   $EZ_DB->run_query( $query, 1 );
-            $row        =   mysqli_fetch_assoc($results);
-            $Data       =   unserialize( $row['key_value'] );
-            //db( $Data ); die;
-
+            $query_get_features     =   "SELECT key_value FROM config WHERE key_name ='features_status'";
+            $results    =   $EZ_DB->run_query( $query_get_features );
+            
+            if ( !$results ) { //If does not have features_status then insert it
+                $initial_data = array(NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+                $initial_data_serialize = serialize($initial_data);
+                $query_set_features  = "INSERT INTO config VALUES ( 'features_status', '$initial_data_serialize' )";
+                $EZ_DB->run_query( $query_set_features );
+            }
+            
+            $results = $EZ_DB->run_query( $query_get_features );
+            $Data = unserialize( $results['key_value'] );
+            
             for( $i=0; $i<=10; $i++ ){
 
                 $class      =   ( !$i || ( $i % 2 == 0 ) ) ? ' even' : ' odd';

@@ -117,4 +117,4 @@ class Router {
 
             return '';
         }
-    }
+}

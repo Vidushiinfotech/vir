@@ -1,7 +1,6 @@
 <?php
 /**
  * Commmon global functions
- *
  */
 
 /* Define necessary Constants */
@@ -170,12 +169,14 @@ function get_body_class( $class = array() ) {
     //Add file name as class to body
     if ( isset($Router->page_name) ) {
         global $Router;
-        if ( array_key_exists($Router->page_name, get_pages_name_title()) )
-            $classes[] = $Router->page_name;
-        else if ($Router->is_cms_page($Router->page_name)){
-
+        if ( array_key_exists($Router->page_name, get_pages_name_title()) ) {
+            if ($Router->page_name === '404') {
+                $classes[] = 'error404'; //Instead of assigning '404' assign 'error404' to maintain one class name
+            } else {
+                $classes[] = $Router->page_name;
+            }
+        } else if ($Router->is_cms_page($Router->page_name)){
             $classes[] = 'cms-page '.$Router->page_name;
-            
         }
         else
             $classes[] = 'error404';
@@ -298,6 +299,7 @@ function vit_login(){
 
             /* Login process here */
             $_SESSION['user_id'] = $result['ID'];
+            $_SESSION['user_email'] = $result['user_email'];
             $_SESSION['capability'] = 'user';
             $homepage = return_site_url();
             vit_redirect( $homepage );
@@ -316,29 +318,21 @@ function vit_signup(){
 
     global $EZ_DB;
 
-    $fname  =   mysqli_real_escape_string( $EZ_DB->connect , $_POST['fname'] );
-    $lname  =   mysqli_real_escape_string( $EZ_DB->connect , $_POST['lname'] );
     $email  =   mysqli_real_escape_string( $EZ_DB->connect , $_POST['loginmail'] );
-    $psw    =   mysqli_real_escape_string( $EZ_DB->connect , $_POST['psw'] );
-    $uname  =   mysqli_real_escape_string( $EZ_DB->connect , $_POST['uname'] );
+    $captcha =  mysqli_real_escape_string( $EZ_DB->connect , $_POST['logincaptcha']);
 
     $error  =   '';
 
-    if( empty( $fname ) )
-        $error .= '<p class="error">Enter First Name</p>';
-    elseif( !preg_match("/^[a-zA-Z'-]+$/",$fname) )
-        $error .= '<p class="error">Enter Valid First Name</p>';
+    if( empty( $captcha ) ){
+        $error .= '<p class="error">Please enter the valid captcha value.</p>';
+        $_SESSION['security_number']=rand(10000,99999);
+    }
 
-    if( empty( $lname ) )
-        $error .= '<p class="error">Enter Last Name</p>';
-    elseif( !preg_match("/^[a-zA-Z'-]+$/",$lname) )
-        $error .= '<p class="error">Enter Valid Last Name</p>';
-
-    if( empty( $uname ) )
-        $error .= '<p class="error">Enter Username</p>';
-
-    if( empty( $psw ) )
-        $error .= '<p class="error">Password should not be blank</p>';
+    elseif ( $captcha != $_SESSION['security_number'] ) {
+        //echo $captcha.'  '.$captcha_code;
+        $error .= '<p class="error">You have entered incorrect captcha value.</p>';
+        $_SESSION['security_number']=rand(10000,99999);
+    }
 
     if( empty( $email ) )
             $error .= '<p class="error">Enter Email Id</p>';
@@ -359,9 +353,9 @@ function vit_signup(){
 
     if( empty( $error ) ){
 
-        $psw = md5($psw);
+//        $psw = md5($psw);
 
-        $query = "INSERT INTO users VALUES ( '', '$uname', '$fname', '$lname', '$psw',  '$email', '0', '0' )";
+        $query = "INSERT INTO users VALUES ( '', '', '', '', '',  '$email', '0', '0' )";
         $res = $EZ_DB->run_query( $query );
         if( !empty( $res ) )
             $error .= '<p class="success">Signed up successfully, please login !</p>';
@@ -401,7 +395,7 @@ function vit_get_all_models(){
 
         while( $row = mysqli_fetch_assoc($result) ){
             
-            array_push( $models, $row['model_name'] );
+            array_push( $models, $row );
         }
 
     }
@@ -415,19 +409,24 @@ function vit_get_all_models(){
  * @param string $span_class Class of span
  * @param string $ip_name Input name
  * @param string $label Label
- * @param string $sup 
- * @param string $sub
- * @param string $content
+ * @param string $sup Superscript
+ * @param string $sub Subscript
+ * @param string $content Content
  * @param string $inputClass Class of input
  * @param string $default_value Default value for input
+ * @param string $title Title for input Default is label
  */
-function vit_render_input( $span_class = 'control', $ip_name='default', $label = '', $sup = '', $sub = '', $content = '', $inputClass= 'igbt-input', $default_value = '' ){ ?>
+function vit_render_input( $span_class = 'control', $ip_name='default', $label = '', $sup = '', $sub = '', $content = '', $inputClass= 'igbt-input', $default_value = '', $title='' ){ ?>
 
     <span class="<?php echo $span_class ?>"><?php
+        $title = strip_tags($title);
+        if ($title == '')
+            $title = strip_tags($label);
+    
         if ($label != '')
-            echo '<label>' . $label . '</label>'; ?>
+            echo '<label title="'. $title .'">' . $label . '</label>'; ?>
         
-        <input data-default="<?php echo $default_value; ?>" class="<?php echo $inputClass ?>" type="text" name="<?php echo $ip_name ?>" value="">
+        <input title="<?php echo $title; ?>" data-default="<?php echo $default_value; ?>" class="<?php echo $inputClass ?>" type="text" name="<?php echo $ip_name ?>" value="">
         <span class="parametric"><?php if( isset( $sup ) && $sup != '' ){ ?><sup><?php echo $sup ?></sup><?php } ?><?php echo $content ?><?php if( !empty( $sub ) ){ ?><sub><?php echo $sub ?></sub><?php } ?></span>
     </span><?php
 
@@ -435,12 +434,18 @@ function vit_render_input( $span_class = 'control', $ip_name='default', $label =
 
 /**
  * Function to render models
+ * @param string $span_class Class of span
+ * @param string $select_name Name of select
+ * @param string $title Title for select
  */
-function vit_render_models( $span_class = 'control', $select_name = '' ){ ?>
+function vit_render_models( $span_class = 'control', $select_name = '', $title='' ){
+    
+    if ($title)
+        $title = 'title="' . $title . '"'; ?>
 
     <span class="select_model <?php echo $span_class ?>">
 
-        <select name="<?php echo $select_name ?>">
+        <select <?php echo $title; ?> name="<?php echo $select_name ?>">
             <option value="">Choose an IGBT</option><?php
 
             $models = vit_get_all_models();
@@ -449,7 +454,7 @@ function vit_render_models( $span_class = 'control', $select_name = '' ){ ?>
 
                 foreach( $models as $model ){
 
-                    echo '<option value="'.$model.'">'.$model.'</option>';
+                    echo '<option data-default="'. (int)( $model['i_rated'] / 2 ) .'" value="'.$model['model_name'].'">'.$model['model_name'].'</option>';
 
                 }
 
@@ -470,7 +475,7 @@ function vit_render_action_buttons(){ ?>
 
         <a class="report-bug" href="#"><span>Report a bug</span></a>
         <a class="download-pdf" href="#"><span>Download PDF</span></a>
-        <a class="download-pdf" href="#"><span>Download CSV</span></a>
+        <a class="download-csv" href="#"><span>Download CSV</span></a>
         <a class="get-samples" href="#"><span>Get Samples</span></a>
 
     </div><?php
@@ -492,6 +497,10 @@ function graph_error_msgs( $msg_id = FALSE ) {
         5 => 'Please select all models',
         6 => 'Enter frequency range between 0 to 100',
         7 => 'I<sub>min</sub> should be less than I<sub>max</sub>',
+        8 => 'Can not create csv. Graph data not available!',
+        9 => 'Can not create csv. Input values not available!',
+       10 => 'Can not create csv. Axis name not available!',
+       11 => 'Please enter Tj > Tsink > Tamb'
     );
 
     if (!$msg_id)
@@ -501,6 +510,47 @@ function graph_error_msgs( $msg_id = FALSE ) {
         return $messages[$msg_id];
     
     return FALSE;
+}
+
+/**
+ * Get nearest value within array
+ * @param int $search value to search for
+ * @param array $arr array within which search will be performed
+ * @return int closest value
+ */
+function vit_getClosest($search, $arr) {
+
+   $closest = null;
+
+   foreach($arr as $item) {
+      if($closest == null || abs($search - $closest) > abs($item - $search)) {
+         $closest = $item;
+      }
+   }
+
+   return $closest;
+}
+
+/**
+ * Get Calculator status of active or inactive
+ * @param int $calc_id Pass the id of calculator else it will return the array of all calculators
+ * @return mixed true or false or array 
+ */
+function get_calc_status($calc_id = NULL) {
+    global $EZ_DB;
+    $data = serialize(array(NULL, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1));
+    $query  = "SELECT key_value FROM config WHERE key_name ='features_status'";
+    $result = $EZ_DB->run_query( $query );
+    
+    if ($result) {
+        $data = unserialize($result['key_value']);
+    }
+    
+    if ($calc_id && array_key_exists($calc_id, $data)) {
+        return $data[$calc_id];
+    } else {
+        return $data;
+    }
 }
 
 /**
@@ -515,7 +565,6 @@ function calculate_Vceon( $args = array() ){
         'error_msg' => 'Error!',
         'data' => array()
     );
-
 
     $error_msg = graph_error_msgs();
     extract( $args, EXTR_SKIP );  
@@ -550,15 +599,28 @@ function calculate_Vceon( $args = array() ){
         $user_plot_rang = FALSE;
 
         //Validate Imin or Imax value
-        if ( !empty( $currentMax ) || !empty( $currentMin ) || $currentMin === '0') {
+        if ( !empty( $currentMax ) || !empty( $currentMin ) || $currentMin === '0' || ( $currentMin <= $currentMax ) ) {
 
             $currentMin = (int) $currentMin;
-            $currentMax = (int) $currentMax;
+            $currentMax = ( !isset( $isCompare ) ) ? (int) $currentMax : $currmaxallow;
 
-            if ( ($currentMax <= 0) || ( ( $iRated * 4 ) < $currentMax ) || ($currentMin >= $currentMax) ){
+            if ( ($currentMax <= 0) || ( ( ( $iRated * 4 ) < $currentMax ) && !isset( $isCompare ) ) || ( isset( $isCompare ) && ( ($currmaxallow) < $currentMax ) ) || ( $currentMin >= $currentMax ) ){
 
-                $result_data['error'] = true;
-                $result_data['error_msg'] = $error_msg[4] . ($iRated*4);
+                $currentMin = (int) $currentMin;
+                $currentMax = ( !isset( $isCompare ) ) ? (int) $currentMax : $currmaxallow;
+
+                if( $currentMin >= $currentMax ){
+
+                    $result_data['error'] = true;
+                    $result_data['error_msg'] = $error_msg[7];
+
+                }else{
+
+                    $result_data['error'] = true;
+                    $result_data['error_msg'] = $error_msg[4] . ($iRated*4);
+
+                }
+
                 return ($result_data);
 
             } else {
@@ -572,7 +634,7 @@ function calculate_Vceon( $args = array() ){
 
         //Add user plotting points if exist
         if ($user_plot_rang) {
-
+            
             $range = $currentMax;
             $plotting = ($currentMax - $currentMin) / 19;
 
@@ -583,7 +645,7 @@ function calculate_Vceon( $args = array() ){
 
             }
 
-        } else {//else calculate the cordinate with 2 times iRated 
+        } else { //else calculate the cordinate with 2 times iRated
             $range = $iRated * 2;
             $plotting = $range / 20;
 
@@ -596,7 +658,7 @@ function calculate_Vceon( $args = array() ){
 
         $iCordinates = array_reverse($iCordinates);
 
-        if ( !($userTemp <= $tjMax) || !($userTemp >= 25) ) {
+        if ( ($userTemp > $tjMax) || ($userTemp < 25) ) {
 
             $result_data['error'] = true;
             $result_data['error_msg'] = $error_msg[3] . $tjMax;
@@ -608,7 +670,7 @@ function calculate_Vceon( $args = array() ){
         $vceonRoom = $vceonMax = $vceonUser = $main_array = $main_array_vcon =  array(); // multiple initialization
 
         foreach( $iCordinates as $temp ){
-
+            
             /************* Calculations for VceON *****************/
 
             $roomExp        =   pow( $temp, $bRoom );// room exponantial
@@ -621,7 +683,7 @@ function calculate_Vceon( $args = array() ){
             $vceonMax[] =   $maxCalc;
 
             /************* Calculations for VceON Ends *****************/
-            
+
         }
 
         /* Formula: Vn= V1+ ([V2-V1]/[T2-T1])*(Tn-T1)) */
@@ -643,11 +705,11 @@ function calculate_Vceon( $args = array() ){
 
         }
 
-            $result_data['error'] = true;
-            $result_data['error_msg'] = $error_msg[3] . $tjMax;
-            $result_data['data']    =   $main_array_vcon;
-
-            return $result_data; // Here we got Vceon points
+        $result_data['error'] = false;
+        $result_data['error_msg'] = $error_msg[3] . $tjMax;
+        $result_data['data']    =   $main_array_vcon;
+        
+        return $result_data; // Here we got Vceon points
 
     }
 }
@@ -656,7 +718,7 @@ function calculate_Vceon( $args = array() ){
  * This function calculates ETs
  */
 function calculate_ets( $args = array() ){
-    
+
     global $EZ_DB;
 
     $result_data = array(
@@ -702,19 +764,22 @@ function calculate_ets( $args = array() ){
         if (!empty($currentMax) || !empty($currentMin) || $currentMin === '0') {
 
             $currentMin = (int) $currentMin;
-            $currentMax = (int) $currentMax;
-            
-            if ( ($currentMax <= 0) || ( ( $iRated*4 ) < $currentMax) || ($currentMin >= $currentMax) ) {
+            $currentMax = isset( $isCompare ) ? $currmaxallow : $currentMax;
+
+            if ( ($currentMax <= 0) || ( ( ( $iRated*4 ) < $currentMax ) && !isset( $isCompare ) ) || ( isset( $isCompare ) && ( ( $currmaxallow ) < $currentMax ) ) || ($currentMin >= $currentMax) ) {
                 $result_data['error'] = true;
-                $result_data['error_msg'] = $error_msg[4] . ($iRated*4);
-                echo json_encode($result_data);
+                if( !isset( $isCompare ) )
+                    $result_data['error_msg'] = $error_msg[4] . ($iRated*4);
+                else
+                    $result_data['error_msg'] = $error_msg[4] . $currmaxallow;
+                return ($result_data);
                 die();
             } else {
 
                 $user_plot_rang = true;
             }
         }
-
+        
         $iCordinates = array();
 
         //Add user plotting points if exist
@@ -788,7 +853,7 @@ function calculate_ets( $args = array() ){
 
         }
 
-        $result_data['error'] = true;
+        $result_data['error'] = false;
         $result_data['error_msg'] = $error_msg[3] . $tjMax;
         $result_data['data']    =   $main_array_vcon;
 
@@ -822,7 +887,7 @@ function calculate_ploss( $args = array() ){
 
     }
 
-    if( ( $fMin <= 0 ) || ( $fMin >100 ) || ( $fMax > 100 ) || ( $fMax <= 0 ) ){
+    if( ( $fMin <= 0 ) || ( $fMin >100 ) || ( $fMax > 100 ) || ( $fMax <= 0 ) || ($fMin >= $fMax) ){
 
         $result_data['error'] = true;
         $result_data['error_msg'] = $error_msg[6];
@@ -832,7 +897,11 @@ function calculate_ploss( $args = array() ){
     }
 
     $frequencyDiff      =   ($fMax - $fMin);
-    $frequencyRange     =   $frequencyDiff / 10; // plot the ranges of frequencies
+
+    if( $fMax >10 )
+        $frequencyRange     =   $frequencyDiff / 20; // plot the ranges of frequencies
+    else
+        $frequencyRange     =   $frequencyDiff / 30; // plot the ranges of frequencies
 
     $query = "SELECT i_rated, tjref, vref, vttjmax, atjmax, btjmax, vt, a, b, htjmax, ktjmax, mtjmax, ntjmax, h, k, m, n FROM models where model_name='$modelNo'";
     $result =   $EZ_DB->run_query( $query );
@@ -884,42 +953,39 @@ function calculate_ploss( $args = array() ){
         $nTjRoom    =   $result['n'];
         /* For Ets */
 
-        // Calculate Vceon at Tjmax
-        $power =    pow( $myI,$bMax );
-        $vconMax    =   $vtMax + ( $aMax * $power ); // done
+        /* This is Veon at Tj  */
+        $VcoenTj = calculate_vceon_single_temp( array( 'myI'=>$myI, 'bMax'=>$bMax, 'aMax'=>$aMax, 'vtMax'=>$vtMax, 'bRoom'=>$bRoom, 'aRoom'=>$aRoom, 'vtRoom'=>$vtRoom, 'tjMax'=>$tjMax, 'mytj'=>$mytj ) );
 
-        // calculate Vceon at room temp
-        $power =    pow( $myI , $bRoom );
-        $vconRoom    =   $vtRoom + ( $aRoom * $power ); // done
-
-        /* Calculate Vceon at Mytj : Formula: Vn = V1+ ([V2-V1]/[T2-T1])*(Tn-T1)) */
-        $VcoenTj = $vconRoom + ( ( ( $vconMax - $vconRoom ) / ( $tjMax - 25 ) ) * ( $mytj - 25 ) ); // This is VceOn at Tj
-
-        // calculate Ets at Tj
-        $ipowerk = pow( $myI , $kTjMax );
-        $ipowern = pow( $myI, $nTjMax );
-        $EtsMax = ( $hTjMax * $ipowerk ) + ( $mTjMax + $ipowern ); // done
-
-        // calculate Ets at room
-        $ipowerk = pow( $myI , $kTjRoom );
-        $ipowern = pow( $myI, $nTjRoom );
-        $EtsRoom = ( $hTjRoom * $ipowerk ) + ( $mTjRoom + $ipowern ); // done
-
-        /* Calculate Ets at Tj Formula:  ETS = Etsroom +  ( ( [Etsmax - Etsroom ] / [ Tjmax - Temproom ] ) * ( TempUser - 25 ) )  */
-        $EtsTj = $EtsRoom + ( ( ( $EtsMax - $EtsRoom ) / ( $tjMax - 25 ) ) * ( $mytj - 25 ) ); // This is Ets at Tj
-
+        /* This is Veon at Tj  */
+        $EtsTj = calculate_ets_single_temp( array( 'myI'=>$myI, 'kTjMax'=>$kTjMax, 'nTjMax'=>$nTjMax, 'hTjMax'=>$hTjMax, 'mTjMax'=>$mTjMax, 'kTjRoom'=>$kTjRoom, 'nTjRoom'=>$nTjRoom, 'hTjRoom'=> $hTjRoom, 'mTjRoom'=>$mTjRoom, 'tjMax'=>$tjMax, 'mytj'=>$mytj ) );
         $plosses  =  $points    =   array();
 
         while( $fMax >= $fMin ){
 
-            $calculate = ( ( $myD / 100 ) * ( $VcoenTj * $myI ) ) + ( ( $myvdc / $vref ) * ( $EtsTj * $fMax ) );
+            $prevVal    =   $fMax;
+            $fMax       =   (int)$fMax;
+
+            if( !$fMax )
+                $fMax   =   $prevVal;
+
+            $calculate = ( ( $myD / 100 ) * ( $VcoenTj * $myI ) ) + ( ( $myvdc / $vref ) * ( $EtsTj * $fMax * 1000 / 1000000 ) );
 
             $points[0] = $fMax;
             $points[1] = $calculate;
 
             $plosses[] = $points;
-
+            
             $fMax = $fMax - $frequencyRange;
+        }
+
+        if( ($fMax != $fMin) ){
+
+            $calculate = ( ( $myD/100  ) * ( $VcoenTj * $myI ) ) + ( ( $myvdc / $vref ) * ( $EtsTj * $fMin * (1000 / 1000000) ) );
+
+            $points[0] = $fMin;
+            $points[1] = $calculate;
+
+            $plosses[] = $points;
 
         }
 
@@ -928,11 +994,330 @@ function calculate_ploss( $args = array() ){
         $result_data['error'] = false;
         $result_data['error_msg'] = 'Error!';
         $result_data['data'] = $plosses;
-
         return ( $result_data );
 
     }
+}
 
+/**
+ * Analyze 3rd tab
+ * @global object $EZ_DB
+ * @param array $args
+ * @return boolean
+ */
+function calculate_heat_sink( $args = array() ){
+
+    global $EZ_DB;
+
+    $result_data = array(
+        'error' => false,
+        'error_msg' => 'Error!',
+        'data' => array()
+    );
+
+    $error_msg = graph_error_msgs();
+
+    extract( $args, EXTR_SKIP );
+
+    if( empty( $args ) )
+        return false;
+
+    /* Do all validations here */
+    if( empty( $model ) ){
+
+        $result_data = array(
+
+            'error' => true,
+            'error_msg' => $error_msg[1],
+            'data' => array()
+        );
+    }
+
+    $query = "SELECT er0tjmax, d1tjmax,	d2tjmax, er0, d1, d2, vdt, ad, bd, vtdtjmax, bdtjmax, adtjmax , i_rated, tjref, vref, vttjmax, atjmax, btjmax, vt, a, b, htjmax, ktjmax, mtjmax, ntjmax, h, k, m, n FROM models where model_name='$model'";
+    $result =   $EZ_DB->run_query( $query );
+
+    if( !empty( $result ) ){
+
+        $tjMax = $result['tjref'];
+
+        /* For VceON */
+        $vtRoom = $result['vt'];
+        $aRoom  = $result['a'];
+        $bRoom  = $result['b'];
+
+        $vtMax  = $result['vttjmax'];
+        $aMax   = $result['atjmax'];
+        $bMax   = $result['btjmax'];
+        /* For VceON */
+
+        /* For Ets */
+        $hTjMax =   $result['htjmax'];
+        $kTjMax =   $result['ktjmax'];
+        $mTjMax =   $result['mtjmax'];
+        $nTjMax =   $result['ntjmax'];
+
+        $hTjRoom    =   $result['h'];
+        $kTjRoom    =   $result['k'];
+        $mTjRoom    =   $result['m'];
+        $nTjRoom    =   $result['n'];
+        /* For Ets */
+
+        $vref   =   $result['vref'];
+
+        $frequencyDiff      =   ($fmax - $fmin);
+        $frequencyRange     =   $frequencyDiff / 20; // plot the ranges of frequencies. for plotting 10 points
+
+        /* First calculate Vceon at Tj */
+        $VcoenTj = calculate_vceon_single_temp( array( 'myI'=>$myI, 'bMax'=>$bMax, 'aMax'=>$aMax, 'vtMax'=>$vtMax, 'bRoom'=>$bRoom, 'aRoom'=>$aRoom, 'vtRoom'=>$vtRoom, 'tjMax'=>$tjMax, 'mytj'=>$mytj ) );
+
+        /* Calculate Ets at Tj */
+        $EtsTj = calculate_ets_single_temp( array( 'myI'=>$myI, 'kTjMax'=>$kTjMax, 'nTjMax'=>$nTjMax, 'hTjMax'=>$hTjMax, 'mTjMax'=>$mTjMax, 'kTjRoom'=>$kTjRoom, 'nTjRoom'=>$nTjRoom, 'hTjRoom'=> $hTjRoom, 'mTjRoom'=>$mTjRoom, 'tjMax'=>$tjMax, 'mytj'=>$mytj ) );
+
+        $points = $plosses = $plot = array();
+
+        while( $fmax >= $fmin ){
+
+            $prevVal    =   $fmax;
+            $fmax       =   (int)$fmax;
+
+            if( !$fmax )
+                $fmax = $prevVal;
+
+            $calculate  =   ( ( $myD / 100  ) * ( $VcoenTj * $myI ) ) + ( ( $myvdc / $vref ) * ( $EtsTj * $fmax * (1000 / 1000000) ) );
+
+            $points[0] = $fmax;
+            $points[1] = $calculate;
+
+            $plosses[] = $points;
+
+            $fmax = $fmax - $frequencyRange;
+
+        }
+
+        $fMax = $fmax;
+        $fMin = $fmin;
+
+        if( ($fMax != $fMin) ){
+
+            $calculate = ( ( $myD / 100  ) * ( $VcoenTj * $myI ) ) + ( ( $myvdc / $vref ) * ( $EtsTj * $fMin * (1000 / 1000000) ) );
+
+            $points[0] = $fMin;
+            $points[1] = $calculate;
+
+            $plosses[] = $points;
+
+        }
+
+
+        $plosses = array_reverse($plosses);
+
+        /* Now calculate RTHSA for each Ploss point */
+        foreach( $plosses as $ploss ){
+
+            $plottinfPoints[0]  =   $ploss[0];  
+            $plottinfPoints[1]  =   ( $tSink - $tAmb )/$ploss[1];
+
+            $plot[] = $plottinfPoints;
+
+        }
+
+        $result_data['error'] = false;
+        $result_data['error_msg'] = 'Error!';
+        $result_data['data'] = $plot;
+
+        if( !empty( $returnRaw ) )
+            return ( $result_data );
+        else
+            return json_encode( $result_data );
+
+    }
+
+}
+
+/**
+ * function to calculate switch losses
+ */
+function calculate_split_loss( $args = array() ){
+
+    global $EZ_DB;
+
+    $result_data = array(
+        'error' => false,
+        'error_msg' => 'Error!',
+        'data' => array()
+    );
+
+    $error_msg = graph_error_msgs();
+    extract( $args, EXTR_SKIP );
+
+    if( empty( $args ) )
+        return false;
+
+    /* Do all validations here */
+    if( empty( $model ) ){
+
+        $result_data = array(
+
+            'error' => true,
+            'error_msg' => $error_msg[1],
+            'data' => array()
+        );
+    }
+
+    $query = "SELECT er0tjmax, d1tjmax,	d2tjmax, er0, d1, d2, vdt, ad, bd, vtdtjmax, bdtjmax, adtjmax , i_rated, tjref, vref, vttjmax, atjmax, btjmax, vt, a, b, htjmax, ktjmax, mtjmax, ntjmax, h, k, m, n FROM models where model_name='$model'";
+    $result =   $EZ_DB->run_query( $query );
+
+    if( !empty( $result ) ){
+
+        $tjMax = $result['tjref'];
+        $vref   =   $result['vref'];
+        $iRated =   $result['i_rated'];
+
+        /* For VceON */
+        $vtRoom = $result['vt'];
+        $aRoom  = $result['a'];
+        $bRoom  = $result['b'];
+
+        $vtMax  = $result['vttjmax'];
+        $aMax   = $result['atjmax'];
+        $bMax   = $result['btjmax'];
+        /* For VceON */
+
+        /* For Ets */
+        $hTjMax =   $result['htjmax'];
+        $kTjMax =   $result['ktjmax'];
+        $mTjMax =   $result['mtjmax'];
+        $nTjMax =   $result['ntjmax'];
+
+        $hTjRoom    =   $result['h'];
+        $kTjRoom    =   $result['k'];
+        $mTjRoom    =   $result['m'];
+        $nTjRoom    =   $result['n'];
+        /* For Ets */
+
+        /* For wheeling diode */
+        $vtdtjmax   = $result['vtdtjmax'];
+        $bdtjmax    = $result['bdtjmax'];
+        $adtjmax    = $result['adtjmax'];
+
+        $vdt    =   $result['vdt'];
+        $ad     =   $result['ad'];
+        $bd     =   $result['bd'];
+
+        /* For Err */
+        $er0tjmax   =   $result['er0tjmax'];
+        $d1tjmax    =   $result['d1tjmax'];
+        $d2tjmax    =   $result['d2tjmax'];
+        $er0        =   $result['er0'];
+        $d1         =   $result['d1'];
+        $d2         =   $result['d2'];
+
+        /* First calculate Vceon at Tj */
+        $VcoenTj = calculate_vceon_single_temp( array( 'myI'=>$myI, 'bMax'=>$bMax, 'aMax'=>$aMax, 'vtMax'=>$vtMax, 'bRoom'=>$bRoom, 'aRoom'=>$aRoom, 'vtRoom'=>$vtRoom, 'tjMax'=>$tjMax, 'mytj'=>$mytj ) );
+
+        /* Calculate Ets at Tj */
+        $EtsTj = calculate_ets_single_temp( array( 'myI'=>$myI, 'kTjMax'=>$kTjMax, 'nTjMax'=>$nTjMax, 'hTjMax'=>$hTjMax, 'mTjMax'=>$mTjMax, 'kTjRoom'=>$kTjRoom, 'nTjRoom'=>$nTjRoom, 'hTjRoom'=> $hTjRoom, 'mTjRoom'=>$mTjRoom, 'tjMax'=>$tjMax, 'mytj'=>$mytj ) );
+
+        /* Calculate free wheeling diode */
+        $iPowerbTjMax    =   pow( $myI, $bdtjmax );
+        $V_FtjMax   =   $vtdtjmax + $adtjmax * $iPowerbTjMax; // at TjMax
+
+        $iPowerbRoom    =   pow( $myI, $bd );
+        $V_FRoom        =   $vdt + $ad * $iPowerbRoom; // at Room
+
+        $v_FTj          =   $V_FRoom + ( ($V_FtjMax-$V_FRoom) / ( $tjMax - 25 ) * ( $mytj - 25 ) ); // Vf at tj
+        
+        /* Calculate Err at Tj */
+        $ErrTjMax       =   $er0tjmax + $d1tjmax * ( pow( $myI, $d2tjmax ) ); // At Tjmax
+        $ErrRoom        =   $er0 + $d1 * ( pow( $myI, $d2 ) ); // At room
+        $ErrTj          =   $ErrRoom + ( ( $ErrTjMax - $ErrRoom ) / ( $tjMax - 25 ) * ( $mytj - 25 ) ); // At tj
+
+        $PlossConduction    =   ( $myD / 100 ) * ( ( $VcoenTj ) * $myI );
+        $pSwitching         =   ( $EtsTj * $myf * (1000 / 1000000) );
+        $pCondDiode         =   ( ( 100 - $myD ) / 100 ) * ( $v_FTj * $myI );
+        $pSwitchingDiode    =   $ErrTj * $myf * (1000 / 1000000);
+
+        if( !$pSwitchingDiode )
+            $pSwitchingDiode = $pSwitching * 0.2;
+
+        $result_data['data'] = array(  array( 2, $PlossConduction ), array( 4,$pSwitching ), array( 6,$pCondDiode ), array( 8,$pSwitchingDiode ) );
+
+        return $result_data;
+
+    }
+
+}
+
+/**
+ * Calculate Vceon at single temperature
+ */
+function calculate_vceon_single_temp( $args ){
+
+    extract( $args, EXTR_SKIP );
+    // Calculate Vceon at Tjmax
+    $power      =   pow( $myI , $bMax );
+    $vconMax    =   $vtMax + ( $aMax * $power ); // done
+
+    // calculate Vceon at room temp
+    $power =    pow( $myI , $bRoom );
+    $vconRoom    =   $vtRoom + ( $aRoom * $power ); // done
+
+    /* Calculate Vceon at Mytj : Formula: Vn = V1+ ([V2-V1]/[T2-T1])*(Tn-T1)) */
+    $VcoenTj = $vconRoom + ( ( ( $vconMax - $vconRoom ) / ( $tjMax - 25 ) ) * ( $mytj - 25 ) ); // This is VceOn at Tj
+    return $VcoenTj;
+
+}
+
+/**
+ * Calculate Ets at single temperature
+ */
+function calculate_ets_single_temp( $args ){
+
+    extract( $args, EXTR_SKIP );
+
+    // calculate Ets at Tj
+    $ipowerk = pow( $myI , $kTjMax );
+    $ipowern = pow( $myI, $nTjMax );
+    $EtsMax = ( $hTjMax * $ipowerk ) + ( $mTjMax * $ipowern ); // done
+
+    // calculate Ets at room
+    $ipowerk = pow( $myI , $kTjRoom );
+    $ipowern = pow( $myI, $nTjRoom );
+    $EtsRoom = ( $hTjRoom * $ipowerk ) + ( $mTjRoom * $ipowern ); // done
+
+    /* Calculate Ets at Tj Formula:  ETS = Etsroom +  ( ( [Etsmax - Etsroom ] / [ Tjmax - Temproom ] ) * ( TempUser - 25 ) )  */
+    //print_r($EtsRoom); die;
+    $EtsTj = $EtsRoom + ( ( ( $EtsMax - $EtsRoom ) / ( $tjMax - 25 ) ) * ( $mytj - 25 ) ); // This is Ets at Tj
+
+    return $EtsTj; // This is the Ets value at Tj
+
+}
+
+function get_web_page($url) {
+    $options = array (CURLOPT_RETURNTRANSFER => true, // return web page
+    CURLOPT_HEADER => false, // don't return headers
+    CURLOPT_FOLLOWLOCATION => true, // follow redirects
+    CURLOPT_ENCODING => "", // handle compressed
+    CURLOPT_USERAGENT => "test", // who am i
+    CURLOPT_AUTOREFERER => true, // set referer on redirect
+    CURLOPT_CONNECTTIMEOUT => 120, // timeout on connect
+    CURLOPT_TIMEOUT => 120, // timeout on response
+    CURLOPT_MAXREDIRS => 10 ); // stop after 10 redirects
+
+    $ch = curl_init ( $url );
+    curl_setopt_array ( $ch, $options );
+    $content = curl_exec ( $ch );
+    $err = curl_errno ( $ch );
+    $errmsg = curl_error ( $ch );
+    $header = curl_getinfo ( $ch );
+    $httpCode = curl_getinfo ( $ch, CURLINFO_HTTP_CODE );
+
+    curl_close ( $ch );
+
+    $header ['errno'] = $err;
+    $header ['errmsg'] = $errmsg;
+    $header ['content'] = $content;
+    return $header ['content'];
 }
 
 /**
@@ -945,6 +1330,5 @@ if( !function_exists('db') ){
         echo '<pre>';
         print_r( $data );
         echo '</pre>';
-        die;
     }
 }

@@ -4,6 +4,10 @@
  * This file load the whole site
  */
 
+/**
+ * Lets begin code, because Code is poetry ;)
+ */
+
 /* Load all connection and other files */
 ini_set('display_errors', 1);
 require_once 'includes/init.php';
