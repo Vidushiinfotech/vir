@@ -37,4 +37,4 @@ define( 'EZ_DB_NAME', 'ezigbt' );
 define( 'EZ_DB_USER', 'ezigbtProdUser' );
 
 /* Database Password */
-define( 'EZ_DB_PASS', 'Goezigbtgo' );
+define( 'EZ_DB_PASS', 'Goezigbtgo!' );
