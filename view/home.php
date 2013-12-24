@@ -26,9 +26,7 @@ if( !empty( $_POST ) ){
         <p>Be the first to know when we add powerful tools and new IGBT’s to help you find the right IGBT for your circuit. Subscribe for updates</p>
     <form action="." method="POST" class="sign-up-form">
         <input required="required" name="user_email" type="email" value="" placeholder="Email Address" />
-        <div class="btn-blu alignright">
-            <span><input type="submit" value="Submit" /></span>
-            </div>
+        <input type="submit" value="Submit" id="cform-submit" />
         </form>
     </div>
 </div>

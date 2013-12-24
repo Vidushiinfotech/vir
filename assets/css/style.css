@@ -118,7 +118,7 @@ body.cms-page { font-size: 14px; color: #333; line-height: 20px; }
 .home-content { width: 930px; margin: 0 auto; }
 .sign-up-form { width: 360px; }
 .sign-up-form input[type="email"] { height: 19px; }
-.sign-up-form input[type="submit"] { background: none repeat scroll 0 0 transparent; border: 0 none; color: #FFFFFF; height: 21px; padding: 0; text-shadow: 1px 1px 1px #666666; }
+.sign-up-form input[type="submit"] { background: none repeat scroll 0 0 transparent; border: 0 none; color: #FFFFFF; padding: 4px 10px; text-shadow: 1px 1px 1px #666666; }
 .sign-up-form input[type="submit"]:hover { color: #000; text-shadow: 1px 1px 1px #FFF;  }
 
 /* 404 page */
@@ -196,6 +196,7 @@ body.cms-page { font-size: 14px; color: #333; line-height: 20px; }
     .page-tabs .selected { background: #FFF; border-right: 3px solid #FFF; }
 
 .graph-holder { background: #FFF; border: 3px solid #c6c6c6; width: 1000px; min-height: 500px; }
+.recommend .graph-holder { width: 1200px; padding-top: 30px; }
 #content-wrapper .tabcontent-title { font-size: 24px; margin-bottom: 30px; text-align: center; }
 
 .controls-wrapper select { width: 180px; }
@@ -229,7 +230,6 @@ body.cms-page { font-size: 14px; color: #333; line-height: 20px; }
 .analyze #tab4-graph1, #compare_tab4 { height: 430px; width: 770px; }
 #analyze_tab3 { height: 370px; width: 857px; }
 #analyze_tab5 { width: 860px; height: 300px; }
-
 
 /* Footer style */
 #footer-wrapper .submenu { margin: 0; padding: 0; text-align: center; }
@@ -270,3 +270,11 @@ body.cms-page { font-size: 14px; color: #333; line-height: 20px; }
         .captcha_img, .captcha-fresh { vertical-align: middle }
             .captcha_img { border-radius: 10px; }
             .captcha-fresh { cursor: pointer }
+
+/* Excessive style to be removed later */
+.recommend table { margin: 0 auto; width: 800px; border: 1px solid #333; }
+    .recommend table td { padding: 8px 0 }
+    .recommend table thead { background: rgb(196, 196, 196); font-size: 15px; }
+    .recommend .odd { background: rgb(243, 243, 243); }
+    .recommend .even td { background: rgb(233, 233, 233); }
+    .recommend tbody { font-weight: 100;font-size: 13px; }

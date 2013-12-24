@@ -270,7 +270,7 @@
                                 <div id="analyze_tab5"></div>
                             </div>
                         </div>
-                        
+
                         <?php vit_render_action_buttons() ?>
 
                     </div>

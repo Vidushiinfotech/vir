@@ -214,8 +214,8 @@ if( $_POST['action'] == 'cform_submit' || $_POST['action'] == 'report_bug' ){
     if( $cform ):
         $fname      =   empty( $_POST['fname'] ) ? '' : $_POST['fname'];
         $lname      =   empty( $_POST['lname'] ) ? '' : $_POST['lname'];
-    endif;
         $email      =   empty( $_POST['mail'] ) ? '' : $_POST['mail'];
+    endif;
         $sbjct      =   empty( $_POST['subject'] ) ? '' : $_POST['subject'];
         $message    =   empty( $_POST['msg'] ) ? '' : $_POST['msg'];
         
@@ -281,18 +281,20 @@ if( $_POST['action'] == 'cform_submit' || $_POST['action'] == 'report_bug' ){
         $mail = new PHPMailer();
 
         $mail->IsSMTP();
-        $mail->Host     = "192.168.0.11";
+        $mail->Host     = EZ_SMTP_HOST;
 
-        $mail->Port       = 25; // set the SMTP port for the GMAIL server
+        $mail->Port       =  EZ_SMTP_PORT; // set the SMTP port for the GMAIL server
         $mail->SMTPAuth  = TRUE;
-        $mail->Username   = "ankit.gade@vidushigoc.com"; // SMTP account username
-        $mail->Password   = "p@ssword";// SMTP account password
+        $mail->Username   = EZ_SMTP_USER; // SMTP account username
+        $mail->Password   = EZ_SMTP_PASS;// SMTP account password
 
-        $mail->AddReplyTo("ankit.gade@vidushigoc.com","Ankit Gade");
-        $mail->SetFrom('ankit.gade@vidushigoc.com', 'Ankit Gade');
+        if( $cform )
+            $mail->SetFrom($email,  $fname.' '.$lname );
+        else
+            $mail->SetFrom( EZ_SMTP_FROM, EZ_SMTP_REPLY_FROM_NAME );
 
-        $address = "ankit.gade@vidushigoc.com";
-        $mail->AddAddress($address, "Sumit");
+        $address = EZ_SMTP_FROM;
+        $mail->AddAddress( $address, EZ_SMTP_REPLY_FROM_NAME );
 
         $mail->Subject    = $subject;
 

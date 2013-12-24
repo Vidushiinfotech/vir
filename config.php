@@ -38,3 +38,28 @@ define( 'EZ_DB_USER', 'db_EZIGBT_com' );
 
 /* Database Password */
 define( 'EZ_DB_PASS', 'DyfJjk4YzFl' );
+
+/* SMTP PORT */
+define( 'EZ_SMTP_PORT', 25 );
+
+/* SMTP HOST */
+define( 'EZ_SMTP_HOST', "192.168.0.11" );
+
+/* SMTP user */
+define( 'EZ_SMTP_USER', 'ankit.gade@vidushigoc.com' );
+
+/* SMTP Password */
+define( 'EZ_SMTP_PASS', 'p@ssword' );
+
+/* SMTP Reply To */
+define( 'EZ_SMTP_REPLY', 'ankit.gade@vidushigoc.com' ); // If user will reply, to whom it should go ?
+
+/* SMTP Reply Name */
+define( 'EZ_SMTP_REPLY_NAME', 'Ankit Gade' );
+
+/* SMTP Reply FROM */
+// From which address email is getting sent, On same address you will receive all emails
+define( 'EZ_SMTP_FROM', 'ankit.gade@vidushigoc.com' );
+
+/* SMTP Reply FROM Name */
+define( 'EZ_SMTP_REPLY_FROM_NAME', 'Ankit Gade' );
