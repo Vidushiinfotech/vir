@@ -31,10 +31,10 @@ define ('EZ_ADMIN_PATH', realpath(dirname(__FILE__)) . EZ_SLASHES.'admin'.EZ_SLA
 define( 'EZ_DB_HOST', 'localhost' );
 
 /* database name */
-define( 'EZ_DB_NAME', 'db_EZIGBT_com' );
+define( 'EZ_DB_NAME', 'ezigbt' );
 
 /* database user */
-define( 'EZ_DB_USER', 'db_EZIGBT_com' );
+define( 'EZ_DB_USER', 'ezigbtProdUser' );
 
 /* Database Password */
 define( 'EZ_DB_PASS', 'DyfJjk4YzFl' );
