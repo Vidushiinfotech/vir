@@ -216,7 +216,7 @@ if( $_POST['action'] == 'cform_submit' || $_POST['action'] == 'report_bug' ){
         $lname      =   empty( $_POST['lname'] ) ? '' : $_POST['lname'];
         $email      =   empty( $_POST['mail'] ) ? '' : $_POST['mail'];
     endif;
-        $sbjct      =   empty( $_POST['subject'] ) ? '' : $_POST['subject'];
+        $sbjct      =   'Contact Us Request';
         $message    =   empty( $_POST['msg'] ) ? '' : $_POST['msg'];
         
     if( !$cform )
