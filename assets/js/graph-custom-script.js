@@ -53,7 +53,7 @@ jQuery(document).ready(function (){
         g_tt_ids.forEach(function(graph_id) {
 
             /* Change floting point for few graphs */
-            var floting_point = 2;
+            var floting_point = 3;
             if (graph_id === '#analyze_tab3' || graph_id === "#tab3-graph1") {
                 floting_point = 6;
             }
