@@ -659,103 +659,69 @@ if( $_POST['action'] == 'analyze_tab5' ){
 
     /* Temperature validation */
     if( $mytj < $tsink ){
-
         $result_data = array( 'error'=>true, 'error_msg'=>'Please enter Tj > Tsink', 'data'=>'' );
         echo json_encode($result_data);
         die;
-
     }
 
-    $query = "SELECT er0tjmax, d1tjmax, rthjc_igbt, d2tjmax, er0, d1, d2, vdt, ad, bd, vtdtjmax, bdtjmax, adtjmax , i_rated, tjref, vref, vttjmax, atjmax, btjmax, vt, a, b, htjmax, ktjmax, mtjmax, ntjmax, h, k, m, n FROM models where model_name='$model'";
-    $result =   $EZ_DB->run_query( $query );
-
-    if( !empty( $result ) ){
-        
-        $tjMax  =   $result['tjref'];
-
-        /* For VceON */
-        $vtRoom = $result['vt'];
-        $aRoom  = $result['a'];
-        $bRoom  = $result['b'];
-
-        $vtMax  = $result['vttjmax'];
-        $aMax   = $result['atjmax'];
-        $bMax   = $result['btjmax'];
-        /* For VceON */
-
-        /* For Ets */
-        $hTjMax =   $result['htjmax'];
-        $kTjMax =   $result['ktjmax'];
-        $mTjMax =   $result['mtjmax'];
-        $nTjMax =   $result['ntjmax'];
-
-        $hTjRoom    =   $result['h'];
-        $kTjRoom    =   $result['k'];
-        $mTjRoom    =   $result['m'];
-        $nTjRoom    =   $result['n'];
-        /* For Ets */
-
-        $vref   =   $result['vref'];
-        $rthjc  =   $result['rthjc_igbt'];
-
-        /* First calculate frequency range */
-        $frequencyDiff      =   ($fmax - $fmin);
-        $frequencyRange     =   $frequencyDiff / 15;
-
-        $plossesall = $allFrequencies = $allTjs = $allCurrents = $plotting =  array(); // Initialize empty arrays for later storage
-
-        while( $fmax >= $fmin ){
-
-            array_push( $allFrequencies, $fmax ); // push all values to an array
-            $fmax = $fmax - $frequencyRange;
-
-        }
-
-        if( ($fmax != $fmin) ){
-
-            array_push( $allFrequencies, $fmin ); // push all values to an array
-        }
-
-        foreach( $allFrequencies as $index => $frequency ){
-            
-            $frequency = (int)$frequency;
-
-            for( $myI = 0; $myI <= 200; $myI += 0.1 ){
-
-                $VcoenTj = calculate_vceon_single_temp( array( 'myI'=>$myI, 'bMax'=>$bMax, 'aMax'=>$aMax, 'vtMax'=>$vtMax, 'bRoom'=>$bRoom, 'aRoom'=>$aRoom, 'vtRoom'=>$vtRoom, 'tjMax'=>$tjMax, 'mytj'=>$mytj ) );
-
-                $EtsTj = calculate_ets_single_temp( array( 'myI'=>$myI, 'kTjMax'=>$kTjMax, 'nTjMax'=>$nTjMax, 'hTjMax'=>$hTjMax, 'mTjMax'=>$mTjMax, 'kTjRoom'=>$kTjRoom, 'nTjRoom'=>$nTjRoom, 'hTjRoom'=> $hTjRoom, 'mTjRoom'=>$mTjRoom, 'tjMax'=>$tjMax, 'mytj'=>$mytj ) );
-
-                $plossTj = ( ( $myD / 100 ) * ( $VcoenTj * $myI ) ) + ( ( $myvdc / $vref ) * ( $EtsTj * $frequency * 1000 / 1000000 ) );
-
-                $calculatedTj = ( $rthjc * $myrthcs ) * $plossTj * $tsink;
-
-                array_push( $allTjs, $calculatedTj );
-                array_push( $allCurrents, $myI );
-                array_push( $plossesall, $plossTj );
-
-            }// end of for loop
-
-            $closestval = vit_getClosest( $mytj, $allTjs );
-            $getKey = array_search( $closestval, $allTjs );
-            $currentval = $allCurrents[$getKey];
-
-            $points[0]  = $frequency;
-            $points[1]  = $currentval;
-
-            $plotting[] = $points;
-
-            $allTjs = $allCurrents = $plossesall = array();
-
-        }
-
-        $plotting  = array_reverse( $plotting );
-
-        $result_data['data'] = $plotting;
-
-        echo json_encode( $result_data );
+    /* Check for valid frequency range */
+    if( $fmax < $fmin ){
+        $result_data = array( 'error'=>true, 'error_msg'=>$error_msg[12], 'data'=>'' );
+        echo json_encode($result_data);
+        die;
     }
+
+    $resultData =   calculate_i_vs_f( array( 'model'=>$model, 'mytj'=>$mytj, 'myD'=>$myD, 'fmin'=>$fmin, 'fmax'=>$fmax, 'myvdc'=>$myvdc, 'tsink'=>$tsink, 'myrthcs'=>$myrthcs ) ); 
+    
+    echo json_encode($resultData);
     
 }
+
+/* Compare tab 5 */
+if( $_POST['action'] == 'compare_tab5' ){
+
+    set_time_limit(0);
+
+    $result_data = array( 'error'=>false, 'error_msg'=>'', 'data'=>'' );
+    $error_msg = graph_error_msgs();
+
+    $model1 =   empty( $_POST['modal_id1']) ? false : $_POST['modal_id1'];
+    $model2 =   empty( $_POST['modal_id2']) ? false : $_POST['modal_id2'];
+    $model3 =   empty( $_POST['modal_id3']) ? false : $_POST['modal_id3'];
+    $mytj   =   empty( $_POST['mytj'] ) ? 0 : $_POST['mytj'];
+    $myD    =   empty( $_POST['myd'] ) ? 0 : $_POST['myd'];
+    $fmin   =   empty( $_POST['fmin'] ) ? 0.1 : $_POST['fmin'];
+    $fmax   =   empty( $_POST['fmax'] ) ? 0.1 : $_POST['fmax'];
+    $myvdc  =   empty( $_POST['myvdc'] ) ? 0 : $_POST['myvdc'];
+    $tsink  =   empty( $_POST['tsink'] ) ? 0 : $_POST['tsink'];
+    $myrthcs=   empty( $_POST['myrthcs'] ) ? 0 : $_POST['myrthcs'];
+
+    /* Temperature validation */
+    if( $mytj < $tsink ){
+        $result_data = array( 'error'=>true, 'error_msg'=>'Please enter Tj > Tsink', 'data'=>'' );
+        echo json_encode($result_data);
+        die;
+    }
+
+    /* Check for valid frequency range */
+    if( $fmax < $fmin ){
+        $result_data = array( 'error'=>true, 'error_msg'=>$error_msg[12], 'data'=>'' );
+        echo json_encode($result_data);
+        die;
+    }
+
+    $resultData1 =   calculate_i_vs_f( array( 'model'=>$model1, 'mytj'=>$mytj, 'myD'=>$myD, 'fmin'=>$fmin, 'fmax'=>$fmax, 'myvdc'=>$myvdc, 'tsink'=>$tsink, 'myrthcs'=>$myrthcs ) ); 
+
+    $resultData2 =   calculate_i_vs_f( array( 'model'=>$model2, 'mytj'=>$mytj, 'myD'=>$myD, 'fmin'=>$fmin, 'fmax'=>$fmax, 'myvdc'=>$myvdc, 'tsink'=>$tsink, 'myrthcs'=>$myrthcs ) ); 
+    $resultData3 =   calculate_i_vs_f( array( 'model'=>$model3, 'mytj'=>$mytj, 'myD'=>$myD, 'fmin'=>$fmin, 'fmax'=>$fmax, 'myvdc'=>$myvdc, 'tsink'=>$tsink, 'myrthcs'=>$myrthcs ) ); 
+   
+    $result_data['data'][0] = $resultData1['data'];
+    $result_data['data'][1] = $resultData2['data'];
+    $result_data['data'][2] = $resultData3['data'];
+    
+    echo json_encode($result_data);
+    
+}
+
 
 die(1);

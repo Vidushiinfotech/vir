@@ -223,49 +223,63 @@
              
              if ($all_calc_status[10]) { ?>
 
-                <!-- Tab 5 -->
-                <div class="tab5 tabcontainer clearfix">
+                    <!-- Tab 5 -->
+                    <div class="tab5 tabcontainer clearfix">
 
-                    <h2 class="tabcontent-title">Calculate I vs f curve</h2>
+                        <h2 class="tabcontent-title">Calculate I vs f curve</h2>
 
-                    <div class="controls-wrapper">
+                        <div class="controls-wrapper">
 
-                        <?php vit_render_models( 'control', 'tab4_chosemodel', 'You can choose from many discrete IGBTs made by companies such as IR, Infineon, Fairchild, Toshiba, Renesas, ST, IXYS, ON etc' ) ?>
-                        <?php vit_render_models( 'control', 'tab4_chosemode2', 'You can choose from many discrete IGBTs made by companies such as IR, Infineon, Fairchild, Toshiba, Renesas, ST, IXYS, ON etc' ) ?>
-                        <?php vit_render_models( 'control', 'tab4_chosemode3', 'You can choose from many discrete IGBTs made by companies such as IR, Infineon, Fairchild, Toshiba, Renesas, ST, IXYS, ON etc' ) ?>
+                            <?php vit_render_models( 'control onchange_ajax cond-all-models', 'tab5_chosemodel', 'You can choose from many discrete IGBTs made by companies such as IR, Infineon, Fairchild, Toshiba, Renesas, ST, IXYS, ON etc' ) ?>
+                            <?php vit_render_models( 'control onchange_ajax cond-all-models', 'tab5_chosemode1', 'You can choose from many discrete IGBTs made by companies such as IR, Infineon, Fairchild, Toshiba, Renesas, ST, IXYS, ON etc' ) ?>
+                            <?php vit_render_models( 'control onchange_ajax cond-all-models', 'tab5_chosemode2', 'You can choose from many discrete IGBTs made by companies such as IR, Infineon, Fairchild, Toshiba, Renesas, ST, IXYS, ON etc' ) ?>
 
-                        <div class="below-line-control center plotme">
-                            <?php vit_render_input( 'control round', 'imin', 'I<sub>min</sub>', '', '', 'A' ); ?>
-                            <?php vit_render_input( 'control round', 'imin', 'I<sub>min</sub>', '', '', 'A' ); ?>
-                            <?php vit_render_input( 'control round', 'imin', 'I<sub>min</sub>', '', '', 'A' ); ?>
+                            <div class="below-line-control center plotme">
+                               
+                                <?php vit_render_input( 'control intonly', 'tab5_ip1', 'My T<sub>j</sub> is', 'o', '', 'C', NULL, 100, 'Enter an approximate junction temperature you expect the IGBT to reach during power conversion'); ?>
+
+                                <?php vit_render_input( 'control', 'tab5_ip2', 'My D is', '', '', '%', NULL, 50, 'Enter Duty cycle of PWM operation. Ton/Ttotal.' ); ?>
+
+                                <?php vit_render_input( 'control intonly', 'tab5_ip3', 'My R<sub>thcs</sub>', 'o', '', 'C/w', '', 1, 'What is the thermal resistance of your ‘isolator’ such as SilPad?' ); ?>
+
+                            </div>
+
+                            <div class="below-line-control center plotme">
+
+                                <?php vit_render_input( 'control', 'tab5_ip4', 'My V<sub>dc</sub> is', '', '', 'V', NULL, 320, 'What is the expected DC bus voltage of your Inverter, UPS or motor drive' ); ?>
+
+                                <?php vit_render_input( 'control', 'tab5_ip5', 'My T<sub>sink</sub> is', 'o', '', 'C', NULL, 80, 'Enter Tsink' ); ?>
+
+                            </div>
+
+                            <div class="below-line-control center plotme">
+
+                                <span>Plot this range:&nbsp;&nbsp;</span>
+
+                                <?php vit_render_input( 'control cond-iminimax', 'tab5_ip6', 'F<sub>min</sub>', '', 'z', 'KH', '', 1, 'Enter the min PWM switching frequency  of your PFC, Buck converter or other power conversion equipment' ); ?>
+
+                                <?php vit_render_input( 'control cond-iminimax', 'tab5_ip7', 'F<sub>max</sub>', '', 'z', 'KH', '', 10, 'Enter the max PWM switching frequency  of your PFC, Buck converter or other power conversion equipment' ); ?>
+
+                            </div>
+
+                            <div class="below-line-control center plotme">
+                                <a data-graph-id="compare_tab5" class="plot-graph-button" href="#">Plot</a>
+                            </div>
+
+                            <div class="tab-graphcontainer clearfix" id="tab5-graphcontainer">
+                                <div class="axis-wrapper clearfix alignleft">
+                                    <span class="ez-xaxis">F(KHz)</span>
+                                    <span class="ez-yaxis"><span>I&nbsp;(A)</span></span>
+                                    <div id="compare_tab5"></div>
+                                </div>
+                            </div>
+
+                            <?php vit_render_action_buttons() ?>
+
                         </div>
 
-                        <div class="below-line-control center plotme">
-                            <?php vit_render_input( 'control round', 'imin', 'I<sub>min</sub>', '', '', 'A' ); ?>
-                            <?php vit_render_input( 'control round', 'imin', 'I<sub>min</sub>', '', '', 'A' ); ?>
-                        </div>
+                    </div><?php
 
-                        <div class="below-line-control center plotme">
-
-                            <span class="plot-range-text">Plot this range:</span>
-
-                            <?php vit_render_input( 'control round', 'imin', 'I<sub>min</sub>', '', '', 'A' ); ?>
-
-                            <?php vit_render_input( 'control round', 'imax', 'I<sub>max</sub>', '', '', 'A' ); ?>
-
-                            <div class="center plotme"><a data-graph-id="tab2_graph1" class="plot-graph-button" href="#">Plot</a></div>
-
-                        </div>
-
-                        <div class="tab-graphcontainer clearfix" id="tab3-graphcontainer">
-                            <div id="tab3-graph1"></div>
-                        </div>
-
-                        <?php vit_render_action_buttons() ?>
-
-                    </div>
-
-                </div><?php
              } ?>
 
     </div>

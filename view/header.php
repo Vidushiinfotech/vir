@@ -40,15 +40,24 @@ if( !session_id() )
             <script type="text/javascript" src="<?php echo return_site_url(); ?>assets/js/action-buttons.js"></script><?php 
 
         } ?>
-            
+
         <script type="text/javascript" src="<?php echo return_site_url(); ?>assets/js/custom-script.js"></script>
-      
 
         <script type="text/javascript">
             var ajaxurl = '<?php echo return_site_url().'admin/ajax.php'; ?>';
             var graph_ajaxurl = '<?php echo return_site_url().'admin/graph-ajax.php'; ?>';
             var savePDF = '<?php echo return_site_url().'additional/testSave.php'; ?>';
             var loader  = '<?php echo VIT_IMG.'/loader.gif' ?>';
+        </script>
+
+        <!-- Google Analytics -->
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            ga('create', 'UA-43258877-1', 'ezigbt.com');
+            ga('send', 'pageview');
         </script>
 
     </head>

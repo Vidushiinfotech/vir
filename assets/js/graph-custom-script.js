@@ -43,7 +43,8 @@ jQuery(document).ready(function (){
             '#analyze_tab3',
             '#tab3-graph1',
             '#compare_tab4',
-            '#analyze_tab5'
+            '#analyze_tab5',
+            '#compare_tab5'
         );
 
     //Bind hover event for every graph
@@ -79,7 +80,6 @@ jQuery(document).ready(function (){
         });
     }
 
-    
     /* For analyze tab1 */
     jQuery('.analyze .tab1 a.plot-graph-button').click(function (e){
         e.preventDefault();
@@ -772,6 +772,7 @@ jQuery(document).ready(function (){
             }).done(function (){
                 jQuery('#ez-ajax-loader').hide();
             });
+
         }
 
     }); //Compare tab1 click function end
@@ -1178,7 +1179,114 @@ jQuery(document).ready(function (){
         } // if ( ( graph_id !== undefined ) && ( graph_ajaxurl !== undefined ))
     });
 
-    
+    /* Compare tab5 */
+    jQuery('.compare .tab5 .plot-graph-button').on( 'click', function (e){
+
+        e.preventDefault();
+
+        fill_default_values(jQuery('.compare .tab5 .controls-wrapper'));
+
+        var graph_id  = jQuery(this).data('graph-id');
+        var modal_id1 = jQuery('select[name="tab5_chosemodel"]').val();
+        var modal_id2 = jQuery('select[name="tab5_chosemode1"]').val();
+        var modal_id3 = jQuery('select[name="tab5_chosemode2"]').val();
+        var mytj = jQuery('input[name="tab5_ip1"]').val();
+        var myd = jQuery('input[name="tab5_ip2"]').val();
+        var myrthcs = jQuery('input[name="tab5_ip3"]').val();
+        var myvdc = jQuery('input[name="tab5_ip4"]').val();
+        var tsink = jQuery('input[name="tab5_ip5"]').val();
+        var fmin = jQuery('input[name="tab5_ip6"]').val();
+        var fmax = jQuery('input[name="tab5_ip7"]').val();
+
+        if ( ( graph_id !== undefined ) && ( graph_ajaxurl !== undefined )) {
+
+            var data = {
+
+                action: graph_id,
+                modal_id1: modal_id1,
+                modal_id2: modal_id2,
+                modal_id3: modal_id3,
+                mytj: mytj,
+                myd: myd,
+                myvdc: myvdc,
+                fmin: fmin,
+                fmax: fmax,
+                tsink: tsink,
+                myrthcs: myrthcs
+
+            };
+
+            jQuery('#ez-ajax-loader').show();
+            jQuery('#graph-msg').fadeOut();
+
+            jQuery.ajax({
+                type: "POST",
+                url: graph_ajaxurl,
+                dataType: 'json',
+                data: data,
+
+                success: function(response){
+                    jQuery('#ez-ajax-loader').hide();
+                    jQuery('#graph-msg').fadeOut();
+
+                    if (response.error === false) {
+
+                        var series1 = {
+
+                            data: response.data[0],
+                            color: '#7A9FCF',
+                            label: 'Model: '+modal_id1
+                        };
+
+                        var series2 = {
+                            data: response.data[1],
+                            color: '#CF3A3A',
+                            label: 'Model: '+modal_id2
+                        };
+
+                        var series3 = {
+                            data: response.data[2],
+                            color: '#8FDEB2',
+                            label: 'Model: '+modal_id3
+                        };
+
+                        //Common options for all series
+                        var options = {
+
+                            lines: { show: true },
+                            points: { show: true },
+                            legend: { position: 'nw' },
+                            grid: { hoverable: true, }
+
+                        };
+
+                        var graph_obj = jQuery.plot( jQuery("#"+graph_id), [series1,series2,series3], options);
+                        store_graph_data(graph_obj, 0);
+
+                    } else {
+                        var graph_obj = jQuery.plot(jQuery("#"+graph_id), '');
+                        store_graph_data(graph_obj, 0);
+                        jQuery('#graph-msg').html(response.error_msg).fadeIn();
+                    }
+
+                },// ajax success function ends
+
+                error: function (error_obj, msg) {
+                    console.log(error_obj);
+                    var graph_obj = jQuery.plot(jQuery("#"+graph_id), '');
+                    store_graph_data(graph_obj, 0);
+                    jQuery('#graph-msg').html(msg).fadeIn();
+                    jQuery('#ez-ajax-loader').hide();
+                }
+
+            }).done(function (){
+                jQuery('#ez-ajax-loader').hide();
+            });
+
+        }
+
+    }); // tab5 plot on click function
+
 
 }); // jQuery document ready function
 

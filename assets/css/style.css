@@ -168,10 +168,16 @@ body.cms-page { font-size: 14px; color: #333; line-height: 20px; }
     #cform-submit{ background: #42bf26; /* Old browsers */ background: -moz-linear-gradient(top,  #42bf26 0%, #1c8e22 90%, #1c8e22 97%, #1c8e22 100%); /* FF3.6+ */ background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#42bf26), color-stop(90%,#1c8e22), color-stop(97%,#1c8e22), color-stop(100%,#1c8e22)); /* Chrome,Safari4+ */        background: -webkit-linear-gradient(top,  #42bf26 0%,#1c8e22 90%,#1c8e22 97%,#1c8e22 100%); /* Chrome10+,Safari5.1+ */        background: -o-linear-gradient(top,  #42bf26 0%,#1c8e22 90%,#1c8e22 97%,#1c8e22 100%); /* Opera 11.10+ */        background: -ms-linear-gradient(top,  #42bf26 0%,#1c8e22 90%,#1c8e22 97%,#1c8e22 100%); /* IE10+ */ background: linear-gradient(to bottom,  #42bf26 0%,#1c8e22 90%,#1c8e22 97%,#1c8e22 100%); /* W3C */        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#42bf26', endColorstr='#1c8e22',GradientType=0 ); border: 1px solid #919191; }
     #cform-submit { color: #FFF }
 
+    .signup-form .field label { float: none; margin-right: 0; }
+    .label-wrap { margin-bottom: 10px; }
+
 /* Login page styling fo0r front end */
 .login-wrapper { text-align: center }
 .login-wrapper input[type="text"], .login-wrapper input[type="email"],
 .login-wrapper input[type="password"] { float: right }
+
+.login-wrapper .signup-form input[type="text"], .login-wrapper .signup-form input[type="email"],
+.login-wrapper .signup-form input[type="password"] { float: none }
 
 .home .login-wrapper form { margin: 0 auto; }
 .top-right .topmenu { list-style: none; }
@@ -229,7 +235,7 @@ body.cms-page { font-size: 14px; color: #333; line-height: 20px; }
 #tab3-graph1 { width: 800px; height: 310px; }
 .analyze #tab4-graph1, #compare_tab4 { height: 430px; width: 770px; }
 #analyze_tab3 { height: 370px; width: 857px; }
-#analyze_tab5 { width: 860px; height: 300px; }
+#analyze_tab5, #compare_tab5 { width: 860px; height: 300px; }
 
 /* Footer style */
 #footer-wrapper .submenu { margin: 0; padding: 0; text-align: center; }

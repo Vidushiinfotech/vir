@@ -318,8 +318,9 @@ function vit_signup(){
 
     global $EZ_DB;
 
-    $email  =   mysqli_real_escape_string( $EZ_DB->connect , $_POST['loginmail'] );
-    $captcha =  mysqli_real_escape_string( $EZ_DB->connect , $_POST['logincaptcha']);
+    $email          =   mysqli_real_escape_string( $EZ_DB->connect , $_POST['loginmail'] );
+    $application    =   mysqli_real_escape_string( $EZ_DB->connect , $_POST['primary_application'] );
+    $captcha        =   mysqli_real_escape_string( $EZ_DB->connect , $_POST['logincaptcha']);
 
     $error  =   '';
 
@@ -339,6 +340,9 @@ function vit_signup(){
         elseif( !filter_var($email, FILTER_VALIDATE_EMAIL) )
             $error .= '<p class="error">Enter Valid Email</p>';
 
+    if( empty( $application ) )
+        $error .= '<p class="error">Select your primary application</p>';
+
     /* Check if email already present */
     $query  = "SELECT ID FROM users WHERE user_email='$email'";
     $result = $EZ_DB->run_query( $query );
@@ -353,9 +357,7 @@ function vit_signup(){
 
     if( empty( $error ) ){
 
-//        $psw = md5($psw);
-
-        $query = "INSERT INTO users VALUES ( '', '', '', '', '',  '$email', '0', '0' )";
+        $query = "INSERT INTO users VALUES ( '', '', '', '', '',  '$email', $application, '0', '0' )";
         $res = $EZ_DB->run_query( $query );
         if( !empty( $res ) )
             $error .= '<p class="success">Signed up successfully, please login !</p>';
@@ -500,7 +502,8 @@ function graph_error_msgs( $msg_id = FALSE ) {
         8 => 'Can not create csv. Graph data not available!',
         9 => 'Can not create csv. Input values not available!',
        10 => 'Can not create csv. Axis name not available!',
-       11 => 'Please enter Tj > Tsink > Tamb'
+       11 => 'Please enter Tj > Tsink > Tamb',
+       12 => 'F<sub>min</sub> should be lesser than F<sub>max</sub>',
     );
 
     if (!$msg_id)
@@ -1291,6 +1294,122 @@ function calculate_ets_single_temp( $args ){
 
     return $EtsTj; // This is the Ets value at Tj
 
+}
+
+/**
+ * Function to calculate I vs F curve
+ */
+function calculate_i_vs_f( $args = array() ) {
+
+    global $EZ_DB;
+
+    $result_data = array( 'error'=>false, 'error_msg'=>'', 'data'=>'' );
+    $error_msg = graph_error_msgs();
+
+    extract( $args, EXTR_SKIP );
+
+    /* Temperature validation */
+    if( $mytj < $tsink ){
+        $result_data = array( 'error'=>true, 'error_msg'=>'Please enter Tj > Tsink', 'data'=>'' );
+        return ($result_data);
+        die;
+    }
+
+    /* Check for valid frequency range */
+    if( $fmax < $fmin ){
+        $result_data = array( 'error'=>true, 'error_msg'=>$error_msg[12], 'data'=>'' );
+        return ($result_data);
+        die;
+    }
+
+    $query = "SELECT er0tjmax, d1tjmax, rthjc_igbt, d2tjmax, er0, d1, d2, vdt, ad, bd, vtdtjmax, bdtjmax, adtjmax , i_rated, tjref, vref, vttjmax, atjmax, btjmax, vt, a, b, htjmax, ktjmax, mtjmax, ntjmax, h, k, m, n FROM models where model_name='$model'";
+    $result =   $EZ_DB->run_query( $query );
+    
+    if( !empty( $result ) ){
+
+        $tjMax  =   $result['tjref'];
+
+        /* For VceON */
+        $vtRoom = $result['vt'];
+        $aRoom  = $result['a'];
+        $bRoom  = $result['b'];
+
+        $vtMax  = $result['vttjmax'];
+        $aMax   = $result['atjmax'];
+        $bMax   = $result['btjmax'];
+        /* For VceON */
+
+        /* For Ets */
+        $hTjMax =   $result['htjmax'];
+        $kTjMax =   $result['ktjmax'];
+        $mTjMax =   $result['mtjmax'];
+        $nTjMax =   $result['ntjmax'];
+
+        $hTjRoom    =   $result['h'];
+        $kTjRoom    =   $result['k'];
+        $mTjRoom    =   $result['m'];
+        $nTjRoom    =   $result['n'];
+        /* For Ets */
+
+        $vref   =   $result['vref'];
+        $rthjc  =   $result['rthjc_igbt'];
+
+        /* First calculate frequency range */
+        $frequencyDiff      =   ($fmax - $fmin);
+        $frequencyRange     =   $frequencyDiff / 15;
+
+        $plossesall = $allFrequencies = $allTjs = $allCurrents = $plotting =  array(); // Initialize empty arrays for later storage
+
+        while( $fmax >= $fmin ){
+
+            array_push( $allFrequencies, $fmax ); // push all values to an array
+            $fmax = $fmax - $frequencyRange;
+
+        }
+
+        if( ($fmax != $fmin) ){
+
+            array_push( $allFrequencies, $fmin ); // push all values to an array
+        }
+
+        foreach( $allFrequencies as $index => $frequency ){
+
+            for( $myI = 0; $myI <= 200; $myI += 0.01 ){
+
+                $VcoenTj = calculate_vceon_single_temp( array( 'myI'=>$myI, 'bMax'=>$bMax, 'aMax'=>$aMax, 'vtMax'=>$vtMax, 'bRoom'=>$bRoom, 'aRoom'=>$aRoom, 'vtRoom'=>$vtRoom, 'tjMax'=>$tjMax, 'mytj'=>$mytj ) );
+
+                $EtsTj = calculate_ets_single_temp( array( 'myI'=>$myI, 'kTjMax'=>$kTjMax, 'nTjMax'=>$nTjMax, 'hTjMax'=>$hTjMax, 'mTjMax'=>$mTjMax, 'kTjRoom'=>$kTjRoom, 'nTjRoom'=>$nTjRoom, 'hTjRoom'=> $hTjRoom, 'mTjRoom'=>$mTjRoom, 'tjMax'=>$tjMax, 'mytj'=>$mytj ) );
+
+                $plossTj = ( ( $myD / 100 ) * ( $VcoenTj * $myI ) ) + ( ( $myvdc / $vref ) * ( $EtsTj * $frequency * 1000 / 1000000 ) );
+
+                $calculatedTj = ( $rthjc * $myrthcs ) * $plossTj * $tsink;
+
+                array_push( $allTjs, $calculatedTj );
+                array_push( $allCurrents, $myI );
+                array_push( $plossesall, $plossTj );
+
+            }// end of for loop
+
+            $closestval = vit_getClosest( $mytj, $allTjs );
+            $getKey = array_search( $closestval, $allTjs );
+            $currentval = $allCurrents[$getKey];
+
+            $points[0]  = $frequency;
+            $points[1]  = $currentval;
+
+            $plotting[] = $points;
+
+            $allTjs = $allCurrents = $plossesall = array();
+
+        }
+
+        $plotting  = array_reverse( $plotting );
+
+        $result_data['data'] = $plotting;
+
+        return ( $result_data );
+    }
+    
 }
 
 function get_web_page($url) {

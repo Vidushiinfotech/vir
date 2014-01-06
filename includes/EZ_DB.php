@@ -137,7 +137,7 @@ class EZ_DB {
             // Create user table
             if (  empty($table_exist['users']) ) {
 
-                $query_return = $this->run_query("CREATE TABLE users ( ID MEDIUMINT NOT NULL AUTO_INCREMENT, username varchar(50) NOT NULL, password varchar(100), fname VARCHAR(50) NULL, lname VARCHAR(50) NULL, user_email varchar(100) UNIQUE NOT NULL, is_admin TINYINT NOT NULL DEFAULT '1', is_subscriber TINYINT NOT NULL DEFAULT '0' primary key (ID) );");
+                $query_return = $this->run_query("CREATE TABLE users ( ID MEDIUMINT NOT NULL AUTO_INCREMENT, username varchar(50) NOT NULL, password varchar(100), fname VARCHAR(50) NULL, lname VARCHAR(50) NULL, user_email varchar(100) UNIQUE NOT NULL, application varchar(100) NOT NULL DEFAULT 'Other Apllication', is_admin TINYINT NOT NULL DEFAULT '1', is_subscriber TINYINT NOT NULL DEFAULT '0', primary key (ID) );");
             }
 
             // Create configuration table
