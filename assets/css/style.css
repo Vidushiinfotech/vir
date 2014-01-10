@@ -284,3 +284,5 @@ body.cms-page { font-size: 14px; color: #333; line-height: 20px; }
     .recommend .odd { background: rgb(243, 243, 243); }
     .recommend .even td { background: rgb(233, 233, 233); }
     .recommend tbody { font-weight: 100;font-size: 13px; }
+
+#recommend-table { opacity: 0; -webkit-transition: opacity 1s; -moz-transition: opacity 1s; transition: opacity 1s; }

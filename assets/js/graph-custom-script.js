@@ -17,8 +17,17 @@ jQuery(document).ready(function (){
 
      /* Bind ajax request to all inputs of analyze tab on chagning value */
     jQuery('.controls-wrapper input[type="text"]').on('change', function(){
+
+        if( jQuery('body').hasClass('recommend') ){
+
+            fill_default_values(jQuery('.recommend .controls-wrapper'));            
+            jQuery(this).parents('.controls-wrapper').find('.plot-graph-button').trigger('click');
+            return false;
+            
+        }
+
         var model = jQuery(this).parents('.controls-wrapper').find('.select_model > select').val();
-        if (model) {
+        if ( model ) {
             var msg = validate_value(this); //Validate input
             var cond = check_ajax_req_cond(this); // Check other conditons before sending request
             if ( msg === true ) {
@@ -31,6 +40,7 @@ jQuery(document).ready(function (){
         } else {
             jQuery('#graph-msg').html('Please Choose an IGBT').fadeIn();
         }
+
     });
 
     previousPoint = null;
@@ -83,9 +93,9 @@ jQuery(document).ready(function (){
     /* For analyze tab1 */
     jQuery('.analyze .tab1 a.plot-graph-button').click(function (e){
         e.preventDefault();
-        
+
         fill_default_values(jQuery('.analyze .tab1 .controls-wrapper'));
-        
+
         var current_tab = jQuery(this).parents('.controls-wrapper');
         var graph_id = jQuery(this).data('graph-id');
         var modal_id = jQuery(current_tab).find('select[name="tab1_chosemodel"]').val();
@@ -1287,6 +1297,70 @@ jQuery(document).ready(function (){
 
     }); // tab5 plot on click function
 
+    // Recommend tab
+    jQuery('.recommend .plot-graph-button').on( 'click', function (e){
+
+        e.preventDefault();
+        fill_default_values( jQuery('.recommend .controls-wrapper') );
+        var data = jQuery("#recommend-form").serialize();
+        var elem = jQuery(this);
+
+        var ajaxdata = {
+
+            action: 'recommend',
+            data: data
+        };
+
+        jQuery('#recommend-table').css('opacity',0);
+        jQuery('#ez-ajax-loader').hide();
+        jQuery('#graph-msg').hide();
+
+         jQuery.ajax({
+
+            type: "POST",
+            url: graph_ajaxurl,
+            dataType: 'json',
+            data: ajaxdata,
+
+            success: function( response ){
+
+                console.log(response);
+
+                if( response.error === false ){
+
+                    var models = response.data.models;
+                    var plosses= response.data.plosses;
+
+                    for( var i=0; i<= response.data.models.length; i++ ){
+
+                        jQuery('tr.col-'+(i+1)+' .igbt').html(response.data.models[i]);
+                        jQuery('tr.col-'+(i+1)+' .ploss').html( parseFloat(response.data.plosses[i]).toFixed(3) );
+
+                    }
+
+                    jQuery('#recommend-table').css('opacity',1);
+
+                }else {
+                    jQuery('#graph-msg').html(response.error_msg).fadeIn();
+                }
+
+            },
+
+            error: function (error_obj, msg) {
+                
+                    console.log(error_obj);
+                    jQuery('#graph-msg').html(msg).fadeIn();
+                    jQuery('#ez-ajax-loader').hide();
+            }
+
+        }).done(function (){
+
+            jQuery('#ez-ajax-loader').hide();
+
+        });
+
+        
+    });
 
 }); // jQuery document ready function
 
@@ -1523,7 +1597,7 @@ function getTicks( fmin, fmax, heatsink ){
     }
 
     if(  ( finalTicks.length === 0 ) || ( jQuery.inArray(fmin , finalTicks) < 0 ) ){
-        
+
             finalTicks.push( fmin );
     }
 

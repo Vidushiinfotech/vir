@@ -336,7 +336,7 @@ if( $_POST['action'] == 'tab2_graph1' ){
                 $fMax = $prevVal;
 
             $calculate = ( ( $myD/100 ) * ( $VcoenTj * $myI ) ) + ( ( $myvdc / $vref ) * ( $EtsTj * $fMax * ( 1000 / 1000000 ) ) );
-
+            echo $myD.'--'.$VcoenTj.'--'.$myI.'--'.$myvdc.'--'.$vref.'--'.$EtsTj.'--'.$fMax; die;
             $points[0] = $fMax;
             $points[1] = $calculate;
 
@@ -672,9 +672,9 @@ if( $_POST['action'] == 'analyze_tab5' ){
     }
 
     $resultData =   calculate_i_vs_f( array( 'model'=>$model, 'mytj'=>$mytj, 'myD'=>$myD, 'fmin'=>$fmin, 'fmax'=>$fmax, 'myvdc'=>$myvdc, 'tsink'=>$tsink, 'myrthcs'=>$myrthcs ) ); 
-    
+
     echo json_encode($resultData);
-    
+
 }
 
 /* Compare tab 5 */
@@ -723,5 +723,131 @@ if( $_POST['action'] == 'compare_tab5' ){
     
 }
 
+if( $_POST['action'] == 'recommend' ){
+
+    global $EZ_DB;
+
+    $result_data = array( 'error'=>false, 'error_msg'=>'', 'data'=>'' );
+    $error_msg = graph_error_msgs();
+
+    $response   =   $_POST['data'];
+    $data = parse_str( $_POST['data'], $response );
+
+    $maxTref = $EZ_DB->run_query("SELECT MAX(tjref) as tref FROM models");
+    $maxTref = (int)$maxTref['tref'];
+
+    /* Validate all the things first */
+
+    /* Validate frequency */
+    if( empty( $response['myf'] ) || $response['myf'] > 100 ){
+        
+        $result_data = array( 'error'=>true, 'error_msg'=>'Please enter frequency between 0 to 100', 'data'=>'' );
+        echo json_encode($result_data);
+        die;
+    }
+
+    /* Validate myTj */
+    if( empty( $response['mytj'] ) || $response['mytj'] > $maxTref ){
+
+        $result_data = array( 'error'=>true, 'error_msg'=>'Please enter junction temperature between 0 to '.$maxTref, 'data'=>'' );
+        echo json_encode( $result_data );
+        die;
+    }
+
+    /* Validate Tcase */
+    if( empty( $response['mytcase'] ) || ( $response['mytcase'] > $response['mytj'] ) ) {
+
+        $result_data = array( 'error'=>true, 'error_msg'=>'Tcase should be 25 < Tcase < Tj', 'data'=>'' );
+        echo json_encode($result_data);
+        die;
+    }
+
+    if( $response['myvdc'] < 400 )
+        $condition = ' WHERE v_rated <= 650';
+    else
+        $condition = ' WHERE v_rated >= 650';
+
+    $query  =   "SELECT * FROM models ".$condition.' AND include_model = 1';
+
+    $result = $EZ_DB->run_query( $query, 1 );
+    $count = 0;
+
+    $allTjs = $allmodels = $allPloss = array();
+
+    while( $row = mysqli_fetch_assoc($result) ){
+
+        /* range */
+        $iRated =   $row['i_rated'];
+        $tjMax  =   $row['tjref'];
+        $vref = $row['vref'];
+
+        /* For VceON */
+        $vtRoom = $row['vt'];
+        $aRoom  = $row['a'];
+        $bRoom  = $row['b'];
+
+        $vtMax  = $row['vttjmax'];
+        $aMax   = $row['atjmax'];
+        $bMax   = $row['btjmax'];
+        /* For VceON */
+
+        /* For Ets */
+        $hTjMax =   $row['htjmax'];
+        $kTjMax =   $row['ktjmax'];
+        $mTjMax =   $row['mtjmax'];
+        $nTjMax =   $row['ntjmax'];
+
+        $hTjRoom    =   $row['h'];
+        $kTjRoom    =   $row['k'];
+        $mTjRoom    =   $row['m'];
+        $nTjRoom    =   $row['n'];
+        /* For Ets */
+
+        if( empty( $vref ) || ( $tjMax < $response['mytj'] ) )
+            continue;
+
+        $VcoenTj = calculate_vceon_single_temp( array( 'myI'=>$response['myI'], 'bMax'=>$bMax, 'aMax'=>$aMax, 
+                    'vtMax'=>$vtMax, 'bRoom'=>$bRoom, 'aRoom'=>$aRoom, 'vtRoom'=>$vtRoom, 'tjMax'=>$tjMax, 
+                    'mytj'=>$response['mytj'] ) );
+
+        $EtsTj = calculate_ets_single_temp( array( 'myI'=>$response['myI'], 'kTjMax'=>$kTjMax, 'nTjMax'=>$nTjMax, 
+                    'hTjMax'=>$hTjMax, 'mTjMax'=>$mTjMax, 'kTjRoom'=>$kTjRoom, 'nTjRoom'=>$nTjRoom, 
+                    'hTjRoom'=> $hTjRoom, 'mTjRoom'=>$mTjRoom, 'tjMax'=>$tjMax, 'mytj'=>$response['mytj'] ) ); // This is Ets at Tj
+
+        $ploss = ( $response['myd']/100) * ( $VcoenTj * $response['myI'] ) + ( $response['myvdc'] / $vref ) * $EtsTj * ( $response['myf'] * 1000 / 1000000 );
+
+        // Calculate Tj
+        $calcTj = $row['rthjc_igbt'] * $ploss + $response['mytcase'];
+
+        array_push( $allTjs, $calcTj );
+        array_push( $allmodels, $row['model_name'] );
+        array_push( $allPloss, $ploss );
+
+    }
+
+    $models = $plosses = array();
+
+    if( !empty( $allTjs ) && count( $allTjs ) > 3 ){
+
+        for( $i=1; $i<=3; $i++ ){
+
+            $closest = vit_getClosest( $response['mytj'] , $allTjs );
+            $getKey = array_search( $closest , $allTjs );
+            $model = $allmodels[$getKey];
+            $plossVal = $allPloss[$getKey];
+
+            array_push( $models, $model );
+            array_push( $plosses, $ploss );
+
+        }
+
+        $result_data['data']    =   array('models'=>$models, 'plosses'=>$plosses );
+
+    }
+    
+    echo json_encode($result_data);
+    die;
+
+}
 
 die(1);

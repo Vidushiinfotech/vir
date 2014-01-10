@@ -214,8 +214,8 @@ if( $_POST['action'] == 'cform_submit' || $_POST['action'] == 'report_bug' ){
     if( $cform ):
         $fname      =   empty( $_POST['fname'] ) ? '' : $_POST['fname'];
         $lname      =   empty( $_POST['lname'] ) ? '' : $_POST['lname'];
-        $email      =   empty( $_POST['mail'] ) ? '' : $_POST['mail'];
     endif;
+        $email      =   empty( $_POST['mail'] ) ? 'anonymous@igbt.com' : $_POST['mail'];
         $sbjct      =   'Contact Us Request';
         $message    =   empty( $_POST['msg'] ) ? '' : $_POST['msg'];
         
@@ -269,6 +269,7 @@ if( $_POST['action'] == 'cform_submit' || $_POST['action'] == 'report_bug' ){
 
         if( $cform )
             $mail_HTML  =   str_replace('[igbt-name]' , $name, $mail_HTML );
+        if( !empty($email) )
             $mail_HTML  =   str_replace('[igbt-mail]' , $email, $mail_HTML );
             $mail_HTML  =   str_replace('[igbt-msg]'  , $message, $mail_HTML );
 
@@ -521,11 +522,10 @@ if( $_POST['action'] == 'refresh_captcha' ){
     $_SESSION['security_number']=rand(10000,99999);
     $rand = time();
     echo '<img class="captcha_img" src="'.return_site_url().'admin/external-libs/captchalib/image.php?'.$rand.'" />';
+
 }
 
-
 /**************** Code For PDF Generation is below **********************/
-
     /* Create PDF File */
     if( strpos( $_POST['action'], 'pdf' ) != FALSE ){
 

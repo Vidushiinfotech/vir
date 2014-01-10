@@ -207,10 +207,12 @@ function is_current_page($page_name) {
  * @return boolean true or false
  */
 function is_graph_page(){
+
     global $Router;
     $page_names = array(
         'analyze',
-        'compare'
+        'compare',
+        'recommend'
     );
 
     if (isset($Router->page_name) && in_array($Router->page_name, $page_names))
@@ -972,6 +974,10 @@ function calculate_ploss( $args = array() ){
                 $fMax   =   $prevVal;
 
             $calculate = ( ( $myD / 100 ) * ( $VcoenTj * $myI ) ) + ( ( $myvdc / $vref ) * ( $EtsTj * $fMax * 1000 / 1000000 ) );
+            if( (int)$fMax == 16 ){
+
+                //echo $myD.'--'.$VcoenTj.'--'.$myI.'--'.$myvdc.'--'.$vref.'--'.$EtsTj.'--'.$fMax; die;
+            }
 
             $points[0] = $fMax;
             $points[1] = $calculate;
