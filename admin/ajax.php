@@ -525,6 +525,42 @@ if( $_POST['action'] == 'refresh_captcha' ){
 
 }
 
+/* Refresh captcha logic */
+if( $_POST['action'] == 'recommend_csv' ){
+
+    $responseArr = array( 'error'=>false, 'error_msg'=>'', 'data'=> return_site_url() . 'admin/download.php?site=' . return_site_url() . '&file=recommend.csv' );
+
+    $response = $_POST;
+
+    if( !empty( $response['data'] ) ){
+
+        if(file_exists( EZ_BASE_PATH.'uploads'.EZ_SLASHES.'recommend.csv' ) )
+            unlink( EZ_BASE_PATH.'uploads'.EZ_SLASHES.'recommend.csv' );
+
+        $csv_file = fopen( EZ_BASE_PATH.'uploads'.EZ_SLASHES.'recommend.csv', 'w+');
+        chmod( EZ_BASE_PATH.'uploads'.EZ_SLASHES.'recommend.csv', 0777 );
+        $csv_heading = array('Models', 'Ploss');
+
+        fputcsv( $csv_file, $csv_heading );
+
+        foreach( $response['data']['models'] as $key=>$val ){
+
+            $data = array( $val, $response['data']['plosses'][$key] );
+            fputcsv( $csv_file, $data );
+
+        }
+
+    }else{
+
+        $responseArr = array( 'error'=>true, 'error_msg'=>'Bad request, can\'t generate csv file', 'data'=> '');
+
+    }
+
+    echo json_encode($responseArr);
+    die;
+
+}
+
 /**************** Code For PDF Generation is below **********************/
     /* Create PDF File */
     if( strpos( $_POST['action'], 'pdf' ) != FALSE ){
@@ -548,6 +584,8 @@ if( $_POST['action'] == 'refresh_captcha' ){
             unlink( EZ_BASE_PATH.'uploads/analyse.pdf' );
         if( file_exists(EZ_BASE_PATH.'uploads/compare.pdf') )
             unlink( EZ_BASE_PATH.'uploads/compare.pdf' );
+        if( file_exists(EZ_BASE_PATH.'uploads/recommend.pdf') )
+            unlink( EZ_BASE_PATH.'uploads/recommend.pdf' );
 
         ini_set("session.auto_start", 0);
 
@@ -782,6 +820,61 @@ if( $_POST['action'] == 'refresh_captcha' ){
 
         }
 
+
+        /* Generate PDF for analyze tab2 */
+        if ( $_POST['action'] == 'analyze_tab5_pdf' ) {
+
+            $model  =   $_POST['modelname'];
+            $myD    =   $_POST['myd']; // myd
+            $myvdc  =   $_POST['myvdc']; // myvdc
+            $mytj   =   empty( $_POST['mytj'] ) ? 25 : $_POST['mytj'];
+            $tsink  =   empty( $_POST['tsink'] ) ? 25 : $_POST['tsink'];
+            $rth    =   empty( $_POST['rth'] ) ? 25 : $_POST['rth'];
+            $fmin   =   empty( $_POST['fmin'] ) ? 0.1 : $_POST['fmin'];
+            $fmax   =   empty( $_POST['fmax'] ) ? 100 : $_POST['fmax'];
+
+            $pdf->Cell(35,4,'Discrete IGBT:',0,0,'C',0);
+            $pdf->Cell(35,4,'Temperature:',0,0,'C',0);
+            $pdf->Cell(20,4,'MyD',0,0,'C',0);
+            $pdf->Cell(20,4,'Tsink',0,0,'C',0);
+            $pdf->Cell(20,4,'Rth',0,0,'C',0);
+            $pdf->Cell(20,4,'Fmin',0,0,'C',0);
+            $pdf->Cell(20,4,'Fmax',0,0,'C',0);
+            $pdf->Cell(20,4,'My Vdc',0,1,'C',0);
+            $pdf->Ln(0);
+
+            #row of values
+            $pdf->SetFont('Arial','B',9);
+            $pdf->Cell(35,6,$model,1,0,'C',0);
+            $pdf->Cell(35,6,$mytj.' C',1,0,'C',0);
+            $pdf->Cell(20,6, $myD.' %' ,1,0,'C',0);
+            $pdf->Cell(20,6, $tsink.' C' ,1,0,'C',0);
+            $pdf->Cell(20,6, $rth.' C/W' ,1,0,'C',0);
+            $pdf->Cell(20,6, $fmin.' KHz' ,1,0,'C',0);
+            $pdf->Cell(20,6, $fmax.' KHz' ,1,0,'C',0);
+            $pdf->Cell(20,6,$myvdc.' V',1,1,'C',0);
+
+            $pdf->Ln(1);
+
+            $pdf->SetFont('Arial','',9);
+
+            $pdf->Cell( 195 , -42, date( "Y/m/d h:i:s A",$timestamp ), 0, 0, 'R' );
+            $pdf->Ln(3);
+            $pdf->SetFont('Arial','',12);
+            $pdf->Cell( 240 ,2,str_repeat('_',130) , 0 , 1, 'C',0  );
+            $pdf->Ln(2);
+
+            $pdf->Output('analyse.pdf', 'F');
+
+            $status = copy( EZ_ADMIN_PATH.'analyse.pdf', EZ_BASE_PATH.'uploads/analyse.pdf' );
+            unlink( EZ_ADMIN_PATH.'analyse.pdf' );
+
+            $file = 'analyse.pdf';
+            echo $file;
+
+        }
+
+        
         /* Generate PDF for compare tab1 */
         if ( $_POST['action'] == 'compare_tab1_pdf' ){
 
@@ -1003,7 +1096,47 @@ if( $_POST['action'] == 'refresh_captcha' ){
 
         }
 
+        /* Generate PDF for recommend */
+        if ( $_POST['action'] == 'recommend_pdf' ) {
 
+            $response   =   $_POST['formdata'];
+            $data = parse_str( $_POST['formdata'], $response );
+
+            $pdf->Cell(20,4,'My Vdc',0,0,'C',0);
+            $pdf->Cell(35,4,'My I:',0,0,'C',0);
+            $pdf->Cell(35,4,'My Tj:',0,0,'C',0);
+            $pdf->Cell(20,4,'MyD',0,0,'C',0);
+            $pdf->Cell(20,4,'Frequency',0,0,'C',0);
+            $pdf->Cell(20,4,'Tcase',0,1,'C',0);
+            $pdf->Ln(0);
+
+            $pdf->SetFont('Arial','B',9);
+            $pdf->Cell(20,6,$response['myvdc'],1,0,'C',0);
+            $pdf->Cell(35,6,$response['myI'].' C',1,0,'C',0);
+            $pdf->Cell(35,6, $response['mytj'].' %' ,1,0,'C',0);
+            $pdf->Cell(20,6, $response['myd'].' C' ,1,0,'C',0);
+            $pdf->Cell(20,6, $response['myf'].' C/W' ,1,0,'C',0);
+            $pdf->Cell(20,6, $response['mytcase'].' KHz' ,1,1,'C',0);
+
+            $pdf->Ln(1);
+
+            $pdf->SetFont('Arial','',9);
+
+            $pdf->Cell( 195 , -42, date( "Y/m/d h:i:s A",$timestamp ), 0, 0, 'R' );
+            $pdf->Ln(3);
+            $pdf->SetFont('Arial','',12);
+            $pdf->Cell( 240 ,2,str_repeat('_',130) , 0 , 1, 'C',0  );
+            $pdf->Ln(2);
+
+            
+            $pdf->Output('recommend.pdf', 'F');
+            $status = copy( EZ_ADMIN_PATH.'recommend.pdf', EZ_BASE_PATH.'uploads/recommend.pdf' );
+            unlink( EZ_ADMIN_PATH.'recommend.pdf' );
+
+            $file = 'recommend.pdf';
+            echo $file;
+
+        }
 
     }
 

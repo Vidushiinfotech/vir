@@ -479,7 +479,7 @@ function vit_render_action_buttons(){ ?>
 
         <a class="report-bug" href="#"><span>Report a bug</span></a>
         <a class="download-pdf" href="#"><span>Download PDF</span></a>
-        <a class="download-csv" href="#"><span>Download CSV</span></a>
+        <a class="<?php  echo ( is_current_page('recommend') == 'active' ) ? 'download-recommend-csv' : 'download-csv' ?>" href="#"><span>Download CSV</span></a>
         <a class="get-samples" href="#"><span>Get Samples</span></a>
 
     </div><?php

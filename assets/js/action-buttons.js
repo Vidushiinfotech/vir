@@ -7,6 +7,7 @@ jQuery(document).ready( function() {
 
         var isAnalyze   =   jQuery(this).parents('section.analyze');
         var isCompare   =   jQuery(this).parents('section.compare');
+        var isRecommend =   jQuery(this).parents('section.recommend');
         var tabwrapper  =   jQuery(this).parents('.tabcontainer')
 
         if( isAnalyze.length > 0 ){
@@ -212,10 +213,62 @@ jQuery(document).ready( function() {
                         });
 
                     }
-                    
+ 
                 });
-
                 
+            }
+
+            /* Tab 5 code */
+            if( jQuery(tabwrapper).hasClass('tab5') ){
+
+                var graph_id = jQuery(this).data('graph-id');
+                var modelname = jQuery('select[name="tab5_chosemodel"]').val();
+                var mytj = jQuery('input[name="tab5_ip1"]').val();
+                var myd = jQuery('input[name="tab5_ip2"]').val();
+                var rth = jQuery('input[name="tab5_ip3"]').val();
+                var myvdc = jQuery('input[name="tab5_ip4"]').val();
+                var tsink = jQuery('input[name="tab5_ip5"]').val();
+                var fmin = jQuery('input[name="tab5_ip6"]').val();
+                var fmax = jQuery('input[name="tab5_ip7"]').val();
+                
+                html2canvas([document.getElementById('tab5-graphcontainer')], {
+                    
+                    onrendered: function (canvas) {
+                        
+                        document.getElementById('canvas').appendChild(canvas);
+                        var data1 = canvas.toDataURL('image/png');
+
+                        jQuery.ajax({
+
+                              type: "POST",
+                              url: ajaxurl,
+
+                              data: {
+
+                                    action: 'analyze_tab5_pdf',//_pdf
+                                    image: data1,
+                                    modelname : modelname,
+                                    mytj : mytj,
+                                    myd : myd,
+                                    fmin : fmin,
+                                    fmax : fmax,
+                                    myvdc: myvdc,
+                                    rth: rth,
+                                    tsink: tsink
+
+                              }
+
+                        }).done(function( respond ) {
+
+                                var url = 'admin/download.php?site=any&file=' + respond;
+                                window.location = url;
+
+                        });
+
+                    }
+                    
+                })
+
             }
 
         }
@@ -420,16 +473,16 @@ jQuery(document).ready( function() {
 
                               data: {
 
-                                    action: 'compare_tab4_pdf',//_pdf
-                                    image: data1,
-                                    modelname1 : modelname1,
-                                    modelname2 : modelname2,
-                                    modelname3 : modelname3,
-                                    mytj : mytj,
-                                    myd : myd,
-                                    myf : myf,
-                                    myI: myi,
-                                    myvdc: myvdc
+                                action: 'compare_tab4_pdf',//_pdf
+                                image: data1,
+                                modelname1 : modelname1,
+                                modelname2 : modelname2,
+                                modelname3 : modelname3,
+                                mytj : mytj,
+                                myd : myd,
+                                myf : myf,
+                                myI: myi,
+                                myvdc: myvdc
 
                               }
 
@@ -447,6 +500,38 @@ jQuery(document).ready( function() {
                 
             }
 
+
+        }
+        
+        /* Check for recommend */
+        if( isRecommend.length > 0 ){
+
+            var formdata    =   jQuery("#recommend-form").serialize();
+
+            html2canvas([document.getElementById('recommend-table')], {
+
+                onrendered: function (canvas) {
+
+                    document.getElementById('canvas').appendChild(canvas);
+                    var data1 = canvas.toDataURL('image/png');
+
+                    var ajaxdata    =   {
+
+                        action: 'recommend_pdf',
+                        formdata: formdata,
+                        image: data1
+                    };
+
+                    jQuery.post( ajaxurl, ajaxdata, function(response){
+
+                        var url = 'admin/download.php?site=any&file=' + response;
+                        window.location = url;
+
+                    });
+                    
+                }
+                
+            });
 
         }
 

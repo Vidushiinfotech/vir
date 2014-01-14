@@ -1340,8 +1340,12 @@ jQuery(document).ready(function (){
 
                     jQuery('#recommend-table').css('opacity',1);
 
+                    jQuery('body').data('recommend', response.data);
+
                 }else {
+
                     jQuery('#graph-msg').html(response.error_msg).fadeIn();
+
                 }
 
             },

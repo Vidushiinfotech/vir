@@ -837,14 +837,18 @@ if( $_POST['action'] == 'recommend' ){
             $plossVal = $allPloss[$getKey];
 
             array_push( $models, $model );
-            array_push( $plosses, $ploss );
+            array_push( $plosses, $plossVal );
+            
+            unset( $allTjs[$getKey] );
+            unset( $allmodels[$getKey] );
+            unset( $allPloss[$getKey] );
 
         }
 
         $result_data['data']    =   array('models'=>$models, 'plosses'=>$plosses );
 
     }
-    
+
     echo json_encode($result_data);
     die;
 

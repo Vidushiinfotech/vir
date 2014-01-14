@@ -325,6 +325,43 @@ jQuery(document).ready(function (){
     });
     
 
+    /* Recommend csv download */
+    jQuery('.download-recommend-csv').on('click', function(e){
+
+        e.preventDefault();
+        var data = jQuery('body').data('recommend');
+        
+        console.log(data)
+
+        if( typeof data !== 'undefined' ){
+            
+            var ajaxdata = {
+                
+              action: 'recommend_csv',
+              data: data
+
+            };
+
+            jQuery.post( ajaxurl, ajaxdata, function(response){
+
+                response = jQuery.parseJSON(response);
+                console.log(response);
+                if( response.error === false ){
+
+                    window.location = response.data;
+
+                }else{
+
+                    jQuery('#graph-msg').html(response.error_msg);
+                    jQuery('#graph-msg').show();
+
+                }
+                
+            });
+        }
+        
+    });
+
 });
 
 
