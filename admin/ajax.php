@@ -1102,21 +1102,21 @@ if( $_POST['action'] == 'recommend_csv' ){
             $response   =   $_POST['formdata'];
             $data = parse_str( $_POST['formdata'], $response );
 
-            $pdf->Cell(20,4,'My Vdc',0,0,'C',0);
+            $pdf->Cell(35,4,'My Vdc',0,0,'C',0);
             $pdf->Cell(35,4,'My I:',0,0,'C',0);
-            $pdf->Cell(35,4,'My Tj:',0,0,'C',0);
-            $pdf->Cell(20,4,'MyD',0,0,'C',0);
-            $pdf->Cell(20,4,'Frequency',0,0,'C',0);
-            $pdf->Cell(20,4,'Tcase',0,1,'C',0);
+            $pdf->Cell(30,4,'My Tj:',0,0,'C',0);
+            $pdf->Cell(30,4,'MyD',0,0,'C',0);
+            $pdf->Cell(30,4,'Frequency',0,0,'C',0);
+            $pdf->Cell(30,4,'Tcase',0,1,'C',0);
             $pdf->Ln(0);
 
             $pdf->SetFont('Arial','B',9);
-            $pdf->Cell(20,6,$response['myvdc'],1,0,'C',0);
-            $pdf->Cell(35,6,$response['myI'].' C',1,0,'C',0);
-            $pdf->Cell(35,6, $response['mytj'].' %' ,1,0,'C',0);
-            $pdf->Cell(20,6, $response['myd'].' C' ,1,0,'C',0);
-            $pdf->Cell(20,6, $response['myf'].' C/W' ,1,0,'C',0);
-            $pdf->Cell(20,6, $response['mytcase'].' KHz' ,1,1,'C',0);
+            $pdf->Cell(35,6,$response['myvdc'],1,0,'C',0);
+            $pdf->Cell(35,6,$response['myI'].' A',1,0,'C',0);
+            $pdf->Cell(30,6, $response['mytj'].'C' ,1,0,'C',0);
+            $pdf->Cell(30,6, $response['myd'].' %' ,1,0,'C',0);
+            $pdf->Cell(30,6, $response['myf'].' W' ,1,0,'C',0);
+            $pdf->Cell(30,6, $response['mytcase'].' C' ,1,1,'C',0);
 
             $pdf->Ln(1);
 

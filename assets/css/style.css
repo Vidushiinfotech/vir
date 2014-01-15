@@ -286,3 +286,8 @@ body.cms-page { font-size: 14px; color: #333; line-height: 20px; }
     .recommend tbody { font-weight: 100;font-size: 13px; }
 
 #recommend-table { opacity: 0; -webkit-transition: opacity 1s; -moz-transition: opacity 1s; transition: opacity 1s; }
+#recommend-table tbody tr { display: none }
+
+.recommend .graph-holder { position: relative }
+.recommend .action-buttons { position: absolute;width: 100%;bottom: 0px; left: 15px; }
+

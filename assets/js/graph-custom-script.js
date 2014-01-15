@@ -1315,6 +1315,8 @@ jQuery(document).ready(function (){
         jQuery('#ez-ajax-loader').hide();
         jQuery('#graph-msg').hide();
 
+        jQuery( "#recommend-table tbody tr" ).hide();
+
          jQuery.ajax({
 
             type: "POST",
@@ -1331,10 +1333,15 @@ jQuery(document).ready(function (){
                     var models = response.data.models;
                     var plosses= response.data.plosses;
 
-                    for( var i=0; i<= response.data.models.length; i++ ){
+                    for( var i=0; i< response.data.models.length; i++ ){
 
                         jQuery('tr.col-'+(i+1)+' .igbt').html(response.data.models[i]);
                         jQuery('tr.col-'+(i+1)+' .ploss').html( parseFloat(response.data.plosses[i]).toFixed(3) );
+                        jQuery('tr.col-'+(i+1)+' .pconds').html( parseFloat(response.data.pconds[i]).toFixed(3) );
+                        jQuery('tr.col-'+(i+1)+' .psws').html( parseFloat(response.data.psws[i]).toFixed(3) );
+                        jQuery('tr.col-'+(i+1)+' .deltatj').html( parseFloat(response.data.deltaTjs[i]).toFixed(3) );
+
+                        jQuery( "#recommend-table tr.col-"+(i+1) ).show();
 
                     }
 

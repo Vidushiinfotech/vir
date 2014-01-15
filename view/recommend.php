@@ -41,26 +41,54 @@
 
                            <thead>
                                 <tr>
-                                  <td align="center" valign="middle">Part Number</td>
-                                  <td align="center" valign="middle">Ploss</td>
+                                    <td align="center" valign="middle">Part Number</td>
+                                    <td align="center" valign="middle">Ploss</td>
+                                    <td class="pconds" align="center" valign="middle">P<sub>Conds</sub></td>
+                                    <td class="psws" align="center" valign="middle">Psw</td>
+                                    <td class="deltatj" align="center" valign="middle">DeltaTj</td>
                                 </tr>
                            </thead>
 
                             <tbody>
 
                                 <tr class="col-1 odd">
-                                  <td class="igbt" align="center" valign="middle">IRGB4036</td>
-                                  <td class="ploss" align="center" valign="middle">5</td>
+                                    <td class="igbt" align="center" valign="middle">IRGB4036</td>
+                                    <td class="ploss" align="center" valign="middle">5</td>
+                                    <td class="pconds" align="center" valign="middle">3</td>
+                                    <td class="psws" align="center" valign="middle">3</td>
+                                    <td class="deltatj" align="center" valign="middle">3</td>
                                 </tr>
 
                                 <tr class="col-2 even">
-                                  <td class="igbt" align="center" valign="middle">STGX4560</td>
-                                  <td class="ploss" align="center" valign="middle">4</td>
+                                    <td class="igbt" align="center" valign="middle">STGX4560</td>
+                                    <td class="ploss" align="center" valign="middle">4</td>
+                                    <td class="pconds" align="center" valign="middle">3</td>
+                                    <td class="psws" align="center" valign="middle">3</td>
+                                    <td class="deltatj" align="center" valign="middle">3</td>
                                 </tr>
 
                                 <tr class="col-3 odd">
-                                  <td class="igbt" align="center" valign="middle">IFX12004</td>
-                                  <td class="ploss" align="center" valign="middle">3</td>
+                                    <td class="igbt" align="center" valign="middle">IFX12004</td>
+                                    <td class="ploss" align="center" valign="middle">3</td>
+                                    <td class="pconds" align="center" valign="middle">3</td>
+                                    <td class="psws" align="center" valign="middle">3</td>
+                                    <td class="deltatj" align="center" valign="middle">3</td>
+                                </tr>
+
+                                <tr class="col-4 odd">
+                                    <td class="igbt" align="center" valign="middle">IFX12004</td>
+                                    <td class="ploss" align="center" valign="middle">3</td>
+                                    <td class="pconds" align="center" valign="middle">3</td>
+                                    <td class="psws" align="center" valign="middle">3</td>
+                                    <td class="deltatj" align="center" valign="middle">3</td>
+                                </tr>
+
+                                <tr class="col-5 odd">
+                                    <td class="igbt" align="center" valign="middle">IFX12004</td>
+                                    <td class="ploss" align="center" valign="middle">3</td>
+                                    <td class="pconds" align="center" valign="middle">3</td>
+                                    <td class="psws" align="center" valign="middle">3</td>
+                                    <td class="deltatj" align="center" valign="middle">3</td>
                                 </tr>
 
                           </tbody>
