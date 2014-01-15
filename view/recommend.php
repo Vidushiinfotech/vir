@@ -19,7 +19,7 @@
 
                          <?php vit_render_input( 'control intonly', 'mytj', 'My T<sub>j</sub>', 'o', '', 'C', '', 125, 'Enter an approximate junction temperature you expect the IGBT to reach during power conversion' ); ?>
 
-                         <?php vit_render_input( 'control intonly', 'myf', 'My F<sub>pwm</sub> is', '', '', 'W', '', 16, 'Enter Fpwm' ); ?>
+                         <?php vit_render_input( 'control intonly', 'myf', 'My F<sub>pwm</sub> is', '', '', 'KHz', '', 16, 'Enter Fpwm' ); ?>
 
                         <?php vit_render_input( 'control intonly', 'myd', 'My D', '', '', '%', NULL, 50, 'My D in %' ); ?>
 
@@ -43,9 +43,9 @@
                                 <tr>
                                     <td align="center" valign="middle">Part Number</td>
                                     <td align="center" valign="middle">Ploss</td>
-                                    <td class="pconds" align="center" valign="middle">P<sub>Conds</sub></td>
+                                    <td class="pconds" align="center" valign="middle">P<sub>Cond</sub></td>
                                     <td class="psws" align="center" valign="middle">Psw</td>
-                                    <td class="deltatj" align="center" valign="middle">DeltaTj</td>
+                                    <td class="deltatj" align="center" valign="middle">&Delta;&nbsp;Tjc</td>
                                 </tr>
                            </thead>
 

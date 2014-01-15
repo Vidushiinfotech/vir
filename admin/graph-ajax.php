@@ -823,6 +823,9 @@ if( $_POST['action'] == 'recommend' ){
         // Calculate Tj
         $calcTj = $row['rthjc_igbt'] * $ploss + $response['mytcase'];
 
+        if( $calcTj > $tjMax )
+            continue;
+
         $Pconds  =   ( $response['myd'] / 100 ) * ( ( $VcoenTj ) * $response['myI'] );
         $Psw     =   ( $EtsTj * $response['myf'] * (1000 / 1000000) );
         $DeltaTj =   ( $calcTj - $response['mytcase'] );
