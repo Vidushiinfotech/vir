@@ -1336,10 +1336,10 @@ jQuery(document).ready(function (){
                     for( var i=0; i< response.data.models.length; i++ ){
 
                         jQuery('tr.col-'+(i+1)+' .igbt').html(response.data.models[i]);
-                        jQuery('tr.col-'+(i+1)+' .ploss').html( parseFloat(response.data.plosses[i]).toFixed(3) );
-                        jQuery('tr.col-'+(i+1)+' .pconds').html( parseFloat(response.data.pconds[i]).toFixed(3) );
-                        jQuery('tr.col-'+(i+1)+' .psws').html( parseFloat(response.data.psws[i]).toFixed(3) );
-                        jQuery('tr.col-'+(i+1)+' .deltatj').html( parseFloat(response.data.deltaTjs[i]).toFixed(3) );
+                        jQuery('tr.col-'+(i+1)+' .ploss').html( parseFloat(response.data.plosses[i]).toFixed(1) );
+                        jQuery('tr.col-'+(i+1)+' .pconds').html( parseFloat(response.data.pconds[i]).toFixed(1) );
+                        jQuery('tr.col-'+(i+1)+' .psws').html( parseFloat(response.data.psws[i]).toFixed(1) );
+                        jQuery('tr.col-'+(i+1)+' .deltatj').html( parseFloat(response.data.deltaTjs[i]).toFixed(1) );
 
                         jQuery( "#recommend-table tr.col-"+(i+1) ).show();
 
