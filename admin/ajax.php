@@ -539,13 +539,13 @@ if( $_POST['action'] == 'recommend_csv' ){
 
         $csv_file = fopen( EZ_BASE_PATH.'uploads'.EZ_SLASHES.'recommend.csv', 'w+');
         chmod( EZ_BASE_PATH.'uploads'.EZ_SLASHES.'recommend.csv', 0777 );
-        $csv_heading = array('Models', 'Ploss');
+        $csv_heading = array('Models', 'Ploss','Pcond','Psw','DeltaTj');
 
         fputcsv( $csv_file, $csv_heading );
 
         foreach( $response['data']['models'] as $key=>$val ){
 
-            $data = array( $val, $response['data']['plosses'][$key] );
+            $data = array( $val, $response['data']['plosses'][$key], $response['data']['pconds'][$key], $response['data']['psws'][$key], $response['data']['deltaTjs'][$key] );
             fputcsv( $csv_file, $data );
 
         }
@@ -1111,11 +1111,11 @@ if( $_POST['action'] == 'recommend_csv' ){
             $pdf->Ln(0);
 
             $pdf->SetFont('Arial','B',9);
-            $pdf->Cell(35,6,$response['myvdc'],1,0,'C',0);
+            $pdf->Cell(35,6,$response['myvdc'].' V',1,0,'C',0);
             $pdf->Cell(35,6,$response['myI'].' A',1,0,'C',0);
-            $pdf->Cell(30,6, $response['mytj'].'C' ,1,0,'C',0);
+            $pdf->Cell(30,6, $response['mytj'].' C' ,1,0,'C',0);
             $pdf->Cell(30,6, $response['myd'].' %' ,1,0,'C',0);
-            $pdf->Cell(30,6, $response['myf'].' W' ,1,0,'C',0);
+            $pdf->Cell(30,6, $response['myf'].' KHz' ,1,0,'C',0);
             $pdf->Cell(30,6, $response['mytcase'].' C' ,1,1,'C',0);
 
             $pdf->Ln(1);
@@ -1128,7 +1128,6 @@ if( $_POST['action'] == 'recommend_csv' ){
             $pdf->Cell( 240 ,2,str_repeat('_',130) , 0 , 1, 'C',0  );
             $pdf->Ln(2);
 
-            
             $pdf->Output('recommend.pdf', 'F');
             $status = copy( EZ_ADMIN_PATH.'recommend.pdf', EZ_BASE_PATH.'uploads/recommend.pdf' );
             unlink( EZ_ADMIN_PATH.'recommend.pdf' );
