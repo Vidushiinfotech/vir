@@ -1470,6 +1470,25 @@ function vit_sort_array( $array, $refArray ){
 }
 
 /**
+ * Make indices of array in ascending order
+ */
+function vit_maintain_indices( $array = array() ){
+
+    if( empty( $array ) )
+        return $array();
+
+    $order_array = array();
+
+    foreach( $array as $k=>$v ){
+        
+        array_push( $order_array, $v );
+    }
+
+    return $order_array;
+
+}
+
+/**
  * Debugging Function
  */
 if( !function_exists('db') ){

@@ -877,6 +877,8 @@ if( $_POST['action'] == 'recommend' ){
         vit_sort_array(  $result_data['data']['deltaTjs'] , &$result_data['data']['plosses'] );
         vit_sort_array(  $result_data['data']['deltaTjs'] , &$result_data['data']['pconds'] );
         vit_sort_array(  $result_data['data']['deltaTjs'] , &$result_data['data']['psws'] );
+        $result_data['data']['deltaTjs'] = vit_maintain_indices( $result_data['data']['deltaTjs'] );
+
     }
 
     echo json_encode($result_data);
