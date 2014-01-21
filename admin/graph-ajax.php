@@ -873,10 +873,10 @@ if( $_POST['action'] == 'recommend' ){
 
         $result_data['data']    =   array('models'=>$models, 'plosses'=>$plosses, 'pconds'=>$pconds, 'psws'=>$psws, 'deltaTjs'=>$deltaTjs );
         asort($result_data['data']['deltaTjs']);
-        vit_sort_array(  $result_data['data']['deltaTjs'] , &$result_data['data']['models'] );
-        vit_sort_array(  $result_data['data']['deltaTjs'] , &$result_data['data']['plosses'] );
-        vit_sort_array(  $result_data['data']['deltaTjs'] , &$result_data['data']['pconds'] );
-        vit_sort_array(  $result_data['data']['deltaTjs'] , &$result_data['data']['psws'] );
+        $result_data['data']['models'] = vit_sort_array(  $result_data['data']['deltaTjs'] , $result_data['data']['models'] );
+        $result_data['data']['plosses'] = vit_sort_array(  $result_data['data']['deltaTjs'] , $result_data['data']['plosses'] );
+        $result_data['data']['pconds'] = vit_sort_array(  $result_data['data']['deltaTjs'] , $result_data['data']['pconds'] );
+        $result_data['data']['psws'] = vit_sort_array(  $result_data['data']['deltaTjs'] , $result_data['data']['psws'] );
         $result_data['data']['deltaTjs'] = vit_maintain_indices( $result_data['data']['deltaTjs'] );
 
     }

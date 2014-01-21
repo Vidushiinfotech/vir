@@ -1454,19 +1454,21 @@ function vit_sort_array( $array, $refArray ){
 
     $toCount = count( $array ) / 2;
     $toCount = floor( $toCount );
-    
+
     $count = 0;
     foreach ( $array as $key=>$val ){
-        
+
         if( $count >= $toCount )
             break;
-        
+
         $temp = $refArray[$count];
         $refArray[$count] = $refArray[$key];
         $refArray[$key] = $temp;
 
         $count++;
     }
+
+    return $refArray;
 }
 
 /**
