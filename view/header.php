@@ -23,7 +23,6 @@ if( !session_id() )
         <script type="text/javascript" src="<?php echo return_site_url(); ?>assets/js/base64.js"></script>
         <script type="text/javascript" src="http://html2canvas.hertzen.com/build/html2canvas.js"></script>
         <!-- Scripts in development mode -->
-
         <!--[if lt IE 9]>
             <script src="<?php echo return_site_url().'admin/js/html5.js' ?>"></script>
         <![endif]--><?php

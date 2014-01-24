@@ -255,6 +255,15 @@ if( $_POST['action'] == 'tab2_graph1' ){
     $fMin       =   empty( $_POST['fmin'] ) ? 0.1 : $_POST['fmin']; // min value can be 0.1
     $fMax       =   empty( $_POST['fmax'] ) ? 100 : $_POST['fmax']; // max value can be 100
 
+    if( $myD < 0 || $myD > 100 ){
+
+        $result_data['error'] = true;
+        $result_data['error_msg'] = $error_msg[13];
+        echo json_encode( $result_data );
+        die;
+
+    }
+
     if( ( $fMin <= 0 ) || ( $fMin >100 ) || ( $fMax > 100 ) || ( $fMax <= 0 ) || ($fMax <= $fMin) ){
 
         $result_data['error'] = true;
@@ -486,6 +495,15 @@ if( $_POST['action'] == 'compare_tab2' ){
     $freqMin    =   empty($_POST['fmin']) ? 0.1 : $_POST['fmin'];
     $freqMax    =   empty($_POST['fmax']) ? 100 : $_POST['fmax'];
 
+    if( $userd < 0 || $userd > 100 ){
+
+        $result_data['error'] = true;
+        $result_data['error_msg'] = $error_msg[13];
+        echo json_encode( $result_data );
+        die;
+
+    }
+
     $ploss1 = calculate_ploss( array( 'modelNo'=>$model1, 'mytj' => $userTemp, 'myD'=> $userd, 'myI' => $userI, 'myvdc'=>$uservdc, 'fMin'=>$freqMin, 'fMax'=>$freqMax ) );
     $ploss2 = calculate_ploss( array( 'modelNo'=>$model2, 'mytj' => $userTemp, 'myD'=> $userd, 'myI' => $userI, 'myvdc'=>$uservdc, 'fMin'=>$freqMin, 'fMax'=>$freqMax ) );
     $ploss3 = calculate_ploss( array( 'modelNo'=>$model3, 'mytj' => $userTemp, 'myD'=> $userd, 'myI' => $userI, 'myvdc'=>$uservdc, 'fMin'=>$freqMin, 'fMax'=>$freqMax ) );
@@ -533,20 +551,24 @@ if( $_POST['action'] == 'analyze_tab3' ){
     $fMax   =   empty( $_POST['fmax'] ) ? 0 : $_POST['fmax'];
     $myI    =   empty( $_POST['myI'] ) ? 0 : $_POST['myI'];
 
-    /* A validation line */
-    if( ($mytj < $tSink) || ( $tSink < $tAmb ) || ( $mytj < $tAmb ) ){
+    $error_msg = graph_error_msgs();
+    $result_data = array( 'error' => true, 'error_msg' => $error_msg[11], 'data' => array() );
 
-        $error_msg = graph_error_msgs();
+    if( $myD < 0 || $myD > 100 ){
 
-        $result_data = array(
-            'error' => true,
-            'error_msg' => $error_msg[11],
-            'data' => array()
-        );
-
+        $result_data['error'] = true;
+        $result_data['error_msg'] = $error_msg[13];
         echo json_encode( $result_data );
         die;
 
+    }
+
+    /* A validation line */
+    if( ($mytj < $tSink) || ( $tSink < $tAmb ) || ( $mytj < $tAmb ) ){
+
+        $result_data = array('error_msg' => $error_msg[11]);
+        echo json_encode( $result_data );
+        die;
     }
 
     $heatSink   =   calculate_heat_sink( array( 'model'=>$model, 'myI'=>$myI, 'mytj'=>$mytj, 'myD'=>$myD,
@@ -588,6 +610,14 @@ if( $_POST['action'] == 'tab3-graph1' ){
         die;
     }
 
+    if( $myD < 0 || $myD > 100 ){
+
+        $result_data['error'] = true;
+        $result_data['error_msg'] = $error_msg[13];
+        echo json_encode( $result_data );
+        die;
+    }
+
     $heatSink1   =   calculate_heat_sink( array( 'model'=>$model1, 'myI'=>$myI, 'mytj'=>$mytj, 'myD'=>$myD,
                                     'myvdc'=>$myvdc, 'tAmb'=>$tAmb, 'tSink'=>$tSink, 'fmin'=>$fmin, 
                                     'fmax'=>$fMax, 'myRthcs'=>$myRthcs, 'returnRaw'=>true ) );
@@ -620,6 +650,14 @@ if( $_POST['action'] == 'compare_tab4' ){
     $myF    =   empty( $_POST['myf'] ) ? 0.1 : $_POST['myf'];
     $myvdc  =   empty( $_POST['myvdc'] ) ? 0 : $_POST['myvdc'];
     $myI    =   empty( $_POST['myi'] ) ? 0 : $_POST['myi'];
+
+    if( $myD < 0 || $myD > 100 ){
+
+        $result_data['error'] = true;
+        $result_data['error_msg'] = $error_msg[13];
+        echo json_encode( $result_data );
+        die;
+    }
 
     $args = array( 'model'=>$model1, 'myI'=>$myI, 'mytj'=>$mytj, 'myD'=>$myD, 'myf'=>$myF, 'myvdc'=>$myvdc );
 
@@ -656,6 +694,14 @@ if( $_POST['action'] == 'analyze_tab5' ){
     $myvdc  =   empty( $_POST['myvdc'] ) ? 0 : $_POST['myvdc'];
     $tsink  =   empty( $_POST['tsink'] ) ? 0 : $_POST['tsink'];
     $myrthcs=   empty( $_POST['myrthcs'] ) ? 0 : $_POST['myrthcs'];
+
+    if( $myD < 0 || $myD > 100 ){
+
+        $result_data['error'] = true;
+        $result_data['error_msg'] = $error_msg[13];
+        echo json_encode( $result_data );
+        die;
+    }
 
     /* Temperature validation */
     if( $mytj < $tsink ){
@@ -695,6 +741,14 @@ if( $_POST['action'] == 'compare_tab5' ){
     $myvdc  =   empty( $_POST['myvdc'] ) ? 0 : $_POST['myvdc'];
     $tsink  =   empty( $_POST['tsink'] ) ? 0 : $_POST['tsink'];
     $myrthcs=   empty( $_POST['myrthcs'] ) ? 0 : $_POST['myrthcs'];
+
+    if( $myD < 0 || $myD > 100 ){
+
+        $result_data['error'] = true;
+        $result_data['error_msg'] = $error_msg[13];
+        echo json_encode( $result_data );
+        die;
+    }
 
     /* Temperature validation */
     if( $mytj < $tsink ){

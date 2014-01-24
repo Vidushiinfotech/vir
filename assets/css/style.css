@@ -193,7 +193,7 @@ body.cms-page { font-size: 14px; color: #333; line-height: 20px; }
 .axis-wrapper .ez-yaxis { display: block;  font-size: 0.875em; position: absolute; }
 .axis-wrapper .ez-xaxis { border-bottom: 1px solid #DDDDDD; bottom: -20px; left: 7%; padding-bottom: 5px;  text-align: center; width: 91%; }
 .axis-wrapper .ez-yaxis { border-left: 1px solid #DDDDDD;  height: 91%; left: -20px; top: 2%; width: 20px; }
-.axis-wrapper .ez-yaxis span { display: block; margin-left: 0; position: relative; top: 48%; transform: rotate(-90deg); -webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg); -ms-transform: rotate(-90deg); -o-transform: rotate(-90deg); transform: rotate(-90deg); }
+.axis-wrapper .ez-yaxis span { white-space: nowrap; display: block; margin-left: 0; position: relative; top: 48%; transform: rotate(-90deg); -webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg); -ms-transform: rotate(-90deg); -o-transform: rotate(-90deg); transform: rotate(-90deg); }
 .ez-axis-names { position: relative; }
 .tab-holder, .graph-holder { float: left }
 .tab-holder { margin-right: -3px; position: relative; width: 188px; z-index: 10; }
@@ -212,6 +212,7 @@ body.cms-page { font-size: 14px; color: #333; line-height: 20px; }
 .control input[type="text"] { height: 22px; border-radius: 5px 0 0 5px; width: 145px; }
 .control .parametric { background: none repeat scroll 0 0 #74C3E4; border-radius: 0 5px 5px 0; margin-left: -5px; padding: 7px 13px; vertical-align: middle; line-height: 22px; }
 .ie10 .control .parametric { display: inline-block; }
+    .ie9 .control .parametric { padding-bottom: 9px }
 .plotme { margin-top: 35px; }
 .plotme a { display: inline-block;text-decoration: none;padding: 10px 20px; background: url('../img/btn-grn-right.jpg') repeat-x; border-radius: 5px; color: #FFF; text-shadow: 1px 1px 1px #666666; }
 .plotme a:hover, .plotme a:active { color: #000000; text-shadow: 1px 1px 1px #FFFFFF; }

@@ -148,7 +148,7 @@ function get_body_class( $class = array() ) {
         foreach ($browsers as $value) {
             $match = strpos($user_agent, $value);
             if (false !== $match) {
-                
+
                 // Add ie version
                 if ('msie' == $value) {
                     preg_match( '/msie ([0-9]+)([a-zA-Z0-9.]+)/', $user_agent, $browser_version );
@@ -494,6 +494,7 @@ function vit_render_action_buttons(){ ?>
 function graph_error_msgs( $msg_id = FALSE ) {
 
     $messages = array(
+
         1 => 'Please select an IGBT and enter My T<sub>j</sub>',
         2 => 'Database Error!',
         3 => 'Please enter My T<sub>j</sub> value from 25 to ',
@@ -506,6 +507,8 @@ function graph_error_msgs( $msg_id = FALSE ) {
        10 => 'Can not create csv. Axis name not available!',
        11 => 'Please enter Tj > Tsink > Tamb',
        12 => 'F<sub>min</sub> should be lesser than F<sub>max</sub>',
+       13 => 'Enter Ducty cycle (MyD) beteen 0 to 100'
+
     );
 
     if (!$msg_id)
