@@ -1245,7 +1245,7 @@ function calculate_split_loss( $args = array() ){
         $ErrTj          =   $ErrRoom + ( ( $ErrTjMax - $ErrRoom ) / ( $tjMax - 25 ) * ( $mytj - 25 ) ); // At tj
 
         $PlossConduction    =   ( $myD / 100 ) * ( ( $VcoenTj ) * $myI );
-        $pSwitching         =   ( $EtsTj * $myf * (1000 / 1000000) );
+        $pSwitching         =   ( $myvdc / $vref ) * ( $EtsTj * $myf * (1000 / 1000000) );
         $pCondDiode         =   ( ( 100 - $myD ) / 100 ) * ( $v_FTj * $myI );
         $pSwitchingDiode    =   $ErrTj * $myf * (1000 / 1000000);
 
