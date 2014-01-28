@@ -777,6 +777,9 @@ if( $_POST['action'] == 'compare_tab5' ){
     
 }
 
+/**
+ * Draw recommend table
+ */
 if( $_POST['action'] == 'recommend' ){
 
     global $EZ_DB;
@@ -801,6 +804,14 @@ if( $_POST['action'] == 'recommend' ){
     }
 
     /* Validate myTj */
+    if( empty( $response['myvdc'] ) || $response['myvdc'] < 10 || $response['myvdc'] > 900 ){
+
+        $result_data = array( 'error'=>true, 'error_msg'=>'Select VDC between 10V to 900V', 'data'=>'' );
+        echo json_encode( $result_data );
+        die;
+    }
+
+    /* Validate myTj */
     if( empty( $response['mytj'] ) || $response['mytj'] > $maxTref ){
 
         $result_data = array( 'error'=>true, 'error_msg'=>'Please enter junction temperature between 0 to '.$maxTref, 'data'=>'' );
@@ -816,14 +827,16 @@ if( $_POST['action'] == 'recommend' ){
         die;
     }
 
-    if( $response['myvdc'] <= 120 )        
+    if( $response['myvdc'] > 10 && $response['myvdc'] <= 120 )        
         $condition = ' WHERE v_rated <= 250';
     elseif( $response['myvdc'] > 120 && $response['myvdc'] <= 200 )
         $condition = ' WHERE v_rated <= 350 AND v_rated > 250';
     elseif( $response['myvdc'] > 200 && $response['myvdc'] <= 400 )
         $condition = ' WHERE v_rated <= 650 AND v_rated > 350';
-    else
-        $condition = ' WHERE v_rated >= 900';
+    elseif( $response['myvdc'] > 400 && $response['myvdc'] <= 600 )
+        $condition = ' WHERE v_rated <= 1000 AND v_rated >= 651';
+    elseif( $response['myvdc'] > 600 && $response['myvdc'] <= 900 )
+        $condition = ' WHERE v_rated >= 1000';
 
     $query  =   "SELECT * FROM models ".$condition.' AND include_model = 1';
 
@@ -881,7 +894,7 @@ if( $_POST['action'] == 'recommend' ){
             continue;
 
         $Pconds  =   ( $response['myd'] / 100 ) * ( ( $VcoenTj ) * $response['myI'] );
-        $Psw     =   ( $EtsTj * $response['myf'] * (1000 / 1000000) );
+        $Psw     =   ( $response['myvdc'] / $vref ) * ( $EtsTj * $response['myf'] * (1000 / 1000000) );
         $DeltaTj =   ( $calcTj - $response['mytcase'] );
 
         array_push( $allTjs, $calcTj );
