@@ -42,7 +42,7 @@
                            <thead>
                                 <tr>
                                     <td align="center" valign="middle">Part Number</td>
-                                    <td align="center" valign="middle">Ploss</td>
+                                    <td align="center" valign="middle">P<sub>IGBT</sub></td>
                                     <td class="pconds" align="center" valign="middle">P<sub>Cond</sub></td>
                                     <td class="psws" align="center" valign="middle">Psw</td>
                                     <td class="deltatj" align="center" valign="middle">&Delta;&nbsp;Tjc</td>

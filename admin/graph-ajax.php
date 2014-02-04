@@ -804,9 +804,9 @@ if( $_POST['action'] == 'recommend' ){
     }
 
     /* Validate myTj */
-    if( empty( $response['myvdc'] ) || $response['myvdc'] < 10 || $response['myvdc'] > 900 ){
+    if( empty( $response['myvdc'] ) || $response['myvdc'] < 100 || $response['myvdc'] > 900 ){
 
-        $result_data = array( 'error'=>true, 'error_msg'=>'Select VDC between 10V to 900V', 'data'=>'' );
+        $result_data = array( 'error'=>true, 'error_msg'=>'Select VDC between 100V to 900V', 'data'=>'' );
         echo json_encode( $result_data );
         die;
     }
@@ -827,7 +827,7 @@ if( $_POST['action'] == 'recommend' ){
         die;
     }
 
-    if( $response['myvdc'] > 10 && $response['myvdc'] <= 120 )        
+    if( $response['myvdc'] > 100 && $response['myvdc'] <= 120 )        
         $condition = ' WHERE v_rated <= 250';
     elseif( $response['myvdc'] > 120 && $response['myvdc'] <= 200 )
         $condition = ' WHERE v_rated <= 350 AND v_rated > 250';
@@ -885,8 +885,6 @@ if( $_POST['action'] == 'recommend' ){
                         'hTjMax'=>$hTjMax, 'mTjMax'=>$mTjMax, 'kTjRoom'=>$kTjRoom, 'nTjRoom'=>$nTjRoom, 
                         'hTjRoom'=> $hTjRoom, 'mTjRoom'=>$mTjRoom, 'tjMax'=>$tjMax, 'mytj'=>$response['mytj'] ) ); // This is Ets at Tj
 
-        $ploss = ( $response['myd']/100) * ( $VcoenTj * $response['myI'] ) + ( $response['myvdc'] / $vref ) * $EtsTj * ( $response['myf'] * 1000 / 1000000 );
-
         // Calculate Tj
         $calcTj = $row['rthjc_igbt'] * $ploss + $response['mytcase'];
 
@@ -895,6 +893,7 @@ if( $_POST['action'] == 'recommend' ){
 
         $Pconds  =   ( $response['myd'] / 100 ) * ( ( $VcoenTj ) * $response['myI'] );
         $Psw     =   ( $response['myvdc'] / $vref ) * ( $EtsTj * $response['myf'] * (1000 / 1000000) );
+        $ploss   =   $Pconds + $Psw;
         $DeltaTj =   ( $calcTj - $response['mytcase'] );
 
         array_push( $allTjs, $calcTj );
