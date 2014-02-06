@@ -135,3 +135,13 @@ body { color: #444444; font-family: 'Open Sans',Helvetica,sans-serif; font-size:
 /* Loader style */
 .loading-div { display: none; position: absolute;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0, 0, 0, 0.74); z-index: 5 }
 .loading-div .ajax-loader { position: absolute;top: 47%;left: 47%; }
+
+.field { margin-top: 20px; }
+    .field label, .field input[type="text"], .field input[type="password"] { display: inline-block; vertical-align: middle; width: 200px; }
+    .field label { width: 110px; }
+.admin-settings input[type="submit"] { outline: none; }
+
+.manage-analytics textarea { width: 400px; }
+    .manage-wrap { border: 1px solid #DDDDDD;margin-top: 40px;padding: 20px; }
+    .manage-wrap .response { margin-top: 20px; }
+    

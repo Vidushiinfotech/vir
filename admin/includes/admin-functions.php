@@ -47,7 +47,8 @@ function get_admin_templates_names() {
         'download-emails',
         'calc-control',
         'parts',
-        'cms'
+        'cms',
+        'settings'
     );
 }
 

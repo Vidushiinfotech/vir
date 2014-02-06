@@ -47,6 +47,7 @@ if (!defined('EZ_BASE_PATH')) die('No access!'); //exit if access directly! ?>
             </hgroup><?php
             if ( get_current_admin_id() ) { ?>
                 <div class="right-links">
+                    <a class="button" href="./index.php?page=settings" title="Admin Settings">Admin Settings</a>
                     <a class="button" href="./index.php?page=cms" title="Manage CMS">Manage CMS</a>
                     <a class="button" href="./logout.php" title="Logout">Logout</a>
                 </div><?php

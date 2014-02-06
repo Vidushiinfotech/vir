@@ -248,6 +248,42 @@ jQuery(document).ready(function(){
          });
          
      });
+     
+     /* Admin Settings Page Script */
+     jQuery('#manage-creds').on('submit', function(e){
+
+         e.preventDefault();
+         var data   =   jQuery("#manage-creds").serialize();
+         var elem   =   jQuery(this);
+         
+         jQuery.post( ajaxurl, data, function(response){
+             
+             response = jQuery.parseJSON(response);
+             
+             jQuery(elem).find('.response').html(response.data);
+             
+         });
+
+     });
+
+    /* Admin Settings Page Script */
+     jQuery('#analytics').on('submit', function(e){
+
+         e.preventDefault();
+         var data   =   jQuery("#analytics").serialize();
+         var elem   =   jQuery(this);
+
+         jQuery.post( ajaxurl, data, function(response){
+             
+             console.log(response); 
+
+             response = jQuery.parseJSON(response);
+             jQuery(elem).find('.response').html(response.data);
+
+         });
+
+     });
+
 
 });
 

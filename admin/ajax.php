@@ -561,6 +561,81 @@ if( $_POST['action'] == 'recommend_csv' ){
 
 }
 
+/**
+ * Manage admin credentials
+ */
+if( $_POST['action'] == 'manage_creds' ){
+
+    global $EZ_DB;
+    session_id() ? '' : session_start();
+
+    $response   =   array( 'error'=>false, 'errorMsg'=>'', 'data'=>'' );
+
+    $username   =   trim($_POST['username']);
+    $password   =   trim($_POST['password']);
+
+    if( !empty( $username ) ){
+        $query   = "UPDATE users SET username='".$username."' WHERE ID=".$_SESSION['user_id'];
+        $result  = $EZ_DB->run_query($query);
+    }
+
+    if( !empty( $password ) ){
+
+        $query   = "UPDATE users SET password='".md5($password)."' WHERE ID=".$_SESSION['user_id'];
+        $result  = $EZ_DB->run_query($query);
+    }
+
+    if($result)
+        $response['data']   =   '<p class="success">Information updated successfully</p>';
+    else{
+
+        $response['error']      =   true;
+        $response['data']       =   '<p class="error">Nothing to change</p>';
+    }
+
+    echo json_encode($response);
+    die;
+
+}
+
+/**
+ * Save analytics code
+ */
+if( $_POST['action'] == 'analytics' ){
+
+    global $EZ_DB;
+
+    $code   =   trim($_POST['analytics_code']);
+    $response   =   array( 'error'=>false, 'errorMsg'=>'', 'data'=>'' );
+
+    if( !empty( $code ) ){
+
+        $code   =   mysqli_real_escape_string($EZ_DB->connect, $code);
+        $analytics  =   "SELECT key_value from config where key_name='analytics'";
+        $analytics  =   $EZ_DB->run_query($analytics);
+
+        if( !empty($analytics) )
+            $query  =   "update config set key_value='".$code."' where key_name='analytics'";
+        else
+            $query  =   "insert into config values( 'analytics', '$code' )";
+
+        $result     =   $EZ_DB->run_query($query);
+
+        if( $result )
+            $response['data']   =   '<p class="success">Analytics updated successfully</p>';
+        else{
+
+            $result['error']    =   true;
+            $result['errorMsg'] =   '<p class="error">Failed to update</p>';
+        }
+
+    }
+
+    echo json_encode($response);
+    die;
+
+}
+
 /**************** Code For PDF Generation is below **********************/
     /* Create PDF File */
     if( strpos( $_POST['action'], 'pdf' ) != FALSE ){

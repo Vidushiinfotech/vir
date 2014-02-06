@@ -48,6 +48,7 @@ textarea{overflow:auto;vertical-align:top}
 table{border-collapse:collapse;border-spacing:0}
 /*! End of normalize.css */
 
+html { min-height: 100%; background: url("../img/basebg.jpg") repeat scroll center center transparent; }
 
 .clear { clear: both; }
 
@@ -83,7 +84,7 @@ input[type="email"]:focus, input[type="number"]:focus, input[type="password"]:fo
 
 /* Layout */
 body { font-size: 100%; font-family: 'Open Sans', Helvetica, sans-serif; line-height: 1.188em; color: #000; }
-.container { background: url("../img/basebg.jpg") repeat scroll center center transparent; }
+.container {  }
 
 body.cms-page { font-size: 14px; color: #333; line-height: 20px; }
 

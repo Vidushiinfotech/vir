@@ -2,6 +2,11 @@
 /*
  * Header file
  */
+global $EZ_DB;
+$analytics  =   "SELECT key_value from config where key_name='analytics'";
+$analytics  =   $EZ_DB->run_query($analytics);
+$analytics  =   !empty($analytics) ? ($analytics['key_value']) : '';
+
 if( !session_id() )
     session_start(); ?>
 <!DOCTYPE html>
@@ -9,7 +14,6 @@ if( !session_id() )
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=1024" />
-        <meta name='robots' content='noindex,nofollow' /><!-- Remove after development -->
 
         <title><?php echo get_page_title() ? get_page_title() . " - " : ''; echo get_site_title();  ?></title>
 
@@ -50,14 +54,7 @@ if( !session_id() )
         </script>
 
         <!-- Google Analytics -->
-        <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-            ga('create', 'UA-43258877-1', 'ezigbt.com');
-            ga('send', 'pageview');
-        </script>
+        <?php echo $analytics ?>
 
     </head>
     <body class="<?php echo get_body_class(); ?>">
