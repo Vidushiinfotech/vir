@@ -8,12 +8,15 @@ $analytics  =   $EZ_DB->run_query($analytics);
 $analytics  =   !empty($analytics) ? ($analytics['key_value']) : '';
 
 if( !session_id() )
-    session_start(); ?>
+    session_start();
+
+$class = is_graph_page() ? 'graphhtml' : 'nograph'; ?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
+<html class="<?php echo $class ?>" xmlns="http://www.w3.org/1999/xhtml" lang="en-US">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="viewport" content="width=1024" />
+        <meta name='robots' content='noindex,nofollow' /><!-- Remove after development -->
 
         <title><?php echo get_page_title() ? get_page_title() . " - " : ''; echo get_site_title();  ?></title>
 

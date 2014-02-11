@@ -519,7 +519,7 @@ if( $_POST['action'] == 'refresh_captcha' ){
 
     session_start();
 
-    $_SESSION['security_number']=rand(10000,99999);
+    $_SESSION['security_number'] = rand(10000,99999);
     $rand = time();
     echo '<img class="captcha_img" src="'.return_site_url().'admin/external-libs/captchalib/image.php?'.$rand.'" />';
 

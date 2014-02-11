@@ -23,6 +23,7 @@ if( isset( $_POST['login_submit'] ) ):
     endif;
 if( isset( $_POST['signup_submit'] ) ){
     $response = vit_signup();
+    $_SESSION['security_number']=rand(10000,99999);
 }else
     $_SESSION['security_number']=rand(10000,99999);
 
@@ -96,16 +97,16 @@ get_site_header(); ?>
             </div>
 
             <div class="field clearfix">
-                <img class="captcha_img" title="Captcha Image" alt="Captcha Image" src="<?php echo return_site_url().'admin/external-libs/captchalib/image.php' ?>" />
-                <img class="captcha-fresh" src="<?php echo return_site_url().'admin/external-libs/captchalib/refresh.png' ?>" />
+                <img class="captcha_img" title="Captcha Image" alt="Captcha Image" src="<?php echo return_site_url().'admin/external-libs/captchalib/image.php?pos='.rand() ?>" />
+                <img class="captcha-fresh" src="<?php echo return_site_url().'admin/external-libs/captchalib/refresh.png'; ?>" />
             </div>
 
             <div class="field cform-field">
-                <input id="cform-submit" name="signup_submit" type="submit" value="Submit">
+                <input id="signup_form" name="signup_submit" type="submit" value="Submit">
             </div>
 
         </form><?php
-        
+
     } ?>
 
 </div><?php

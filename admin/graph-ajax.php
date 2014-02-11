@@ -111,6 +111,9 @@ if ( $_POST['action'] == 'tab1_graph1' ) {
                 $iCordinates[] = $range;
                 $range = $range - $plotting;
 
+                if( $range == 0 )
+                    $perfectZero = true;
+
             }
 
         }else {//else calculate the cordinate with 2 times iRated
@@ -122,9 +125,18 @@ if ( $_POST['action'] == 'tab1_graph1' ) {
 
                 $iCordinates[] = $range;
                 $range = $range - $plotting;
+                
+                if( $range == 0 )
+                    $perfectZero = true;
 
             }
         }
+
+        if( !isset( $perfectZero ) ){
+
+            $iCordinates[] = 0;
+        }
+
 
         $iCordinates = array_reverse($iCordinates);
 
@@ -885,15 +897,15 @@ if( $_POST['action'] == 'recommend' ){
                         'hTjMax'=>$hTjMax, 'mTjMax'=>$mTjMax, 'kTjRoom'=>$kTjRoom, 'nTjRoom'=>$nTjRoom, 
                         'hTjRoom'=> $hTjRoom, 'mTjRoom'=>$mTjRoom, 'tjMax'=>$tjMax, 'mytj'=>$response['mytj'] ) ); // This is Ets at Tj
 
+        $Pconds  =   ( $response['myd'] / 100 ) * ( ( $VcoenTj ) * $response['myI'] );
+        $Psw     =   ( $response['myvdc'] / $vref ) * ( $EtsTj * $response['myf'] * (1000 / 1000000) );
+        $ploss   =   $Pconds + $Psw;
         // Calculate Tj
         $calcTj = $row['rthjc_igbt'] * $ploss + $response['mytcase'];
 
         if( $calcTj > $tjMax )
             continue;
 
-        $Pconds  =   ( $response['myd'] / 100 ) * ( ( $VcoenTj ) * $response['myI'] );
-        $Psw     =   ( $response['myvdc'] / $vref ) * ( $EtsTj * $response['myf'] * (1000 / 1000000) );
-        $ploss   =   $Pconds + $Psw;
         $DeltaTj =   ( $calcTj - $response['mytcase'] );
 
         array_push( $allTjs, $calcTj );

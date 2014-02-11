@@ -48,8 +48,8 @@ textarea{overflow:auto;vertical-align:top}
 table{border-collapse:collapse;border-spacing:0}
 /*! End of normalize.css */
 
-html { min-height: 100%; background: url("../img/basebg.jpg") repeat scroll center center transparent; }
-
+html { min-height: 100%; }
+.graphhtml { background: url("../img/basebg.jpg") repeat scroll center center transparent; }
 .clear { clear: both; }
 
 /* Clearfix */

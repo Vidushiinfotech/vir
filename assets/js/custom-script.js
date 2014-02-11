@@ -52,7 +52,9 @@ jQuery(document).ready(function (){
     jQuery("#cform-submit").parent().append(loaderImg);
 
     /* Contact Page JS */
-    jQuery('#cform-submit').on('click', function(){
+    jQuery('#cform-submit').on('click', function(e){
+
+        e.preventDefault();
 
         var fname   =   jQuery('#fname').val();
         var lname   =   jQuery('#lname').val();

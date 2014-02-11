@@ -359,7 +359,8 @@ function vit_signup(){
 
     if( empty( $error ) ){
 
-        $query = "INSERT INTO users VALUES ( '', '', '', '', '',  '$email', $application, '0', '0' )";
+        $query = "INSERT INTO users VALUES ( '', '', '', '', '',  '$email', '$application', '0', '0' )";
+
         $res = $EZ_DB->run_query( $query );
         if( !empty( $res ) )
             $error .= '<p class="success">Signed up successfully, please login !</p>';

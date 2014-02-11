@@ -620,6 +620,7 @@ jQuery(document).ready(function (){
                                                         return markings;
 
                                                     }
+
                                                    },
                                             xaxis: {
 
@@ -1266,8 +1267,42 @@ jQuery(document).ready(function (){
                             lines: { show: true },
                             points: { show: true },
                             legend: { position: 'nw' },
-                            grid: { hoverable: true, }
+                            grid: { hoverable: true,
+                                markings: function(){
 
+                                    var markingArr = [ 0.1, 0.2 , 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 2 , 
+                                    3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 70, 80, 
+                                    90, 100 ] // List all possible values
+
+                                    var markings = [];
+                                    fmin = parseInt(fmin);
+                                    fmax = parseInt(fmax);
+
+                                    var x = fmin;
+
+                                    for( var i = 0; i<= markingArr.length; i++ ){
+
+                                        if( markingArr[i] >= fmin && markingArr[i] <= fmax ){
+
+                                            markings.push( { xaxis: { from: markingArr[i], to: markingArr[i] }, lineWidth: 0.2,  color:"#444" } );
+
+                                        }
+                                    }
+
+                                    //console.log(markings)
+                                    return markings;
+                                }
+
+                            },
+                            
+                            xaxis: {
+
+                                ticks: getTicks(fmin, fmax, true ),
+                                tickDecimals:1,
+                                transform: log_base_10,
+                                inverseTransform: antilog_base_10
+
+                            }
                         };
 
                         var graph_obj = jQuery.plot( jQuery("#"+graph_id), [series1,series2,series3], options);
