@@ -25,7 +25,7 @@
 
                         <div class="below-line-control center plotme">
 
-                            <?php vit_render_input( 'control intonly', 'mytcase', 'My T<sub>case</sub>', 'o', '', 'C', '', 80, 'Enter Tcase' ); ?>
+                            <?php vit_render_input( 'control intonly', 'mytcase', 'My T<sub>case</sub>', 'o', '', 'C', '', 110, 'Enter Tcase' ); ?>
 
                             <?php //vit_render_models( 'control onchange_ajax', 'partmodel', 'You can choose from many discrete IGBTs made by companies such as IR, Infineon, Fairchild, Toshiba, Renesas, ST, IXYS, ON etc' ) ?>
 

@@ -41,6 +41,7 @@ function get_current_admin_id() {
  * @return string Title of site.
  */
 function get_site_title() {
+
     global $EZ_DB;
     $result = $EZ_DB->run_query("SELECT key_value from config WHERE key_name='site_title'");
     if (isset($result['key_value'])) {
@@ -84,6 +85,7 @@ function get_site_footer($footer_name = 'footer') {
  * @return array Titles of pages with filenames
  */
 function get_pages_name_title() {
+
     return array (
         'home'      =>  '',
         'analyze'   =>  'Model a Part',
@@ -476,7 +478,7 @@ function vit_render_models( $span_class = 'control', $select_name = '', $title='
  */
 function vit_render_action_buttons(){ ?>
 
-    <div class="action-buttons">
+    <div class="action-buttons <?php echo get_current_admin_id() ? 'logged-in' : 'not-logged-in' ?>">
 
         <a class="report-bug" href="#"><span>Report a bug</span></a>
         <a class="download-pdf" href="#"><span>Download PDF</span></a>
@@ -1392,13 +1394,15 @@ function calculate_i_vs_f( $args = array() ) {
 
                 $plossTj = ( ( $myD / 100 ) * ( $VcoenTj * $myI ) ) + ( ( $myvdc / $vref ) * ( $EtsTj * $frequency * 1000 / 1000000 ) );
 
-                $calculatedTj = ( $rthjc * $myrthcs ) * $plossTj * $tsink;
+                //$calculatedTj = ( $rthjc * $myrthcs ) * $plossTj * $tsink;
+                $calculatedTj = ( $rthjc + $myrthcs ) * $plossTj * $tsink;
 
                 array_push( $allTjs, $calculatedTj );
                 array_push( $allCurrents, $myI );
                 array_push( $plossesall, $plossTj );
 
             }// end of for loop
+
 
             $closestval = vit_getClosest( $mytj, $allTjs );
             $getKey = array_search( $closestval, $allTjs );

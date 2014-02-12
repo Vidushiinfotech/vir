@@ -85,14 +85,6 @@
 
             </div>
 
-            <div id="pdf-popup" class="popup">
-                
-            </div>
-
-            <div id="csv-popup" class="popup">
-                
-            </div>
-
             <div id="samples-popup" class="popup">
 
                 <div class="report-popup-inside popup-inside">
@@ -128,6 +120,13 @@
 
                 </div>
 
+            </div>
+
+            <div id="no-logged-in" class="popup">
+                <div class="report-popup-inside popup-inside">
+                    <h3 class="thanks-msg">Please login to perform this action</h3>
+                    <img class="closepop" title="Close" src="<?php echo VIT_IMG.'/closebox.png' ?>" alt="close popup" />
+                </div>
             </div>
 
         </div>

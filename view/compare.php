@@ -220,7 +220,7 @@
 
                 </div><?php
              }
-             
+
              if ($all_calc_status[10]) { ?>
 
                     <!-- Tab 5 -->
@@ -235,12 +235,12 @@
                             <?php vit_render_models( 'control onchange_ajax cond-all-models', 'tab5_chosemode2', 'You can choose from many discrete IGBTs made by companies such as IR, Infineon, Fairchild, Toshiba, Renesas, ST, IXYS, ON etc' ) ?>
 
                             <div class="below-line-control center plotme">
-                               
+
                                 <?php vit_render_input( 'control intonly', 'tab5_ip1', 'My T<sub>j</sub> is', 'o', '', 'C', NULL, 100, 'Enter an approximate junction temperature you expect the IGBT to reach during power conversion'); ?>
 
                                 <?php vit_render_input( 'control', 'tab5_ip2', 'My D is', '', '', '%', NULL, 50, 'Enter Duty cycle of PWM operation. Ton/Ttotal.' ); ?>
 
-                                <?php vit_render_input( 'control intonly', 'tab5_ip3', 'My R<sub>thcs</sub>', 'o', '', 'C/w', '', 1, 'What is the thermal resistance of your ‘isolator’ such as SilPad?' ); ?>
+                                <?php vit_render_input( 'control', 'tab5_ip3', 'My R<sub>thcs</sub>', 'o', '', 'C/w', '', 1, 'What is the thermal resistance of your ‘isolator’ such as SilPad?' ); ?>
 
                             </div>
 

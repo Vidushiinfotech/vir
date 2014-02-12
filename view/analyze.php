@@ -5,6 +5,7 @@
     <div class="tab-holder">
 
         <ul class="page-tabs"><?php
+
             $all_calc_status = get_calc_status();
 
             echo $all_calc_status[1] ? '<li data-tab="tab1">Analyse Vce and Ets at my T<sub>j</sub></li>' : '';
@@ -41,13 +42,15 @@
                         <?php vit_render_input( 'control round cond-iminimax', 'imax', 'I<sub>max</sub>', '', '', 'A', NULL, NULL, 'Enter largest range of current.' ); ?>
 
                         <div class="center plotme"><a data-graph-id="tab1_graph1" class="plot-graph-button" href="#">Plot</a></div>
-                        
+
                         <div class="tab-graphcontainer clearfix" id="tab1-graphcontainer">
+
                             <div class="axis-wrapper alignleft clearfix">
                                 <span class="ez-xaxis">I<sub>c</sub>(A)</span>
                                 <span class="ez-yaxis"><span>Vceon(V)</span></span>
                                 <div id="tab1-graph1"></div>
                             </div>
+
                             <div class="axis-wrapper alignright clearfix">
                                 <span class="ez-xaxis">I<sub>c</sub>(A)</span>
                                 <span class="ez-yaxis"><span>Ets(&micro;J)</span></span>
@@ -55,16 +58,14 @@
                             </div>
                         </div>
 
-                    </div>
-
-                    
+                    </div>                    
 
                     <?php vit_render_action_buttons() ?>
 
                 </div><?php
-                
+
             }
-            
+
             if ($all_calc_status[2]) { ?>
 
                 <!-- Tab 2 -->

@@ -132,9 +132,12 @@ jQuery(document).ready(function (){
     jQuery('.report-bug').on('click', function(e){
 
         e.preventDefault();
+
+        var notLoggedin    =   ( jQuery(this).parents('.action-buttons').hasClass('not-logged-in') ) ? false : true;
+
         jQuery('.pop-ups').fadeIn('fast', function(){
 
-            jQuery('#report-popup').fadeIn('slow');
+            (notLoggedin) ? jQuery('#report-popup').fadeIn('slow') : jQuery('#no-logged-in').fadeIn('slow');
             overlayHide();
 
         });
@@ -143,17 +146,13 @@ jQuery(document).ready(function (){
 
     /* Popup scripts */
     jQuery('.get-samples').on('click', function(e){
-
         e.preventDefault();
         jQuery('.pop-ups').fadeIn('fast', function(){
-
             jQuery('#samples-popup').fadeIn('slow');
             overlayHide();
-
         });
 
     });
-
 
     /* Submit a report bug */
     jQuery('.report-submit').on('click', function(){
@@ -193,77 +192,93 @@ jQuery(document).ready(function (){
 
     /* Download CSV button */
     jQuery('.action-buttons .download-csv').on('click', function(e){
+
         e.preventDefault();
-        var element = jQuery(this);
-        var graph_data = jQuery('body').data('graph_data');
-        var input_values = new Object();
-        var axis_names = new Array('');
-        var temp = new Array();
-        var title = '';
-        var is_compare = jQuery('.tabs-wrapper').hasClass('compare') ? true : false;
-        var classes = jQuery(this).parents('.tabcontainer').attr('class');
-        var whichTab = classes.split(' ');
-        whichTab = whichTab[0];
+        var notLoggedin    =   ( jQuery(this).parents('.action-buttons').hasClass('not-logged-in') ) ? true : false;
 
-        /* Collect all inputs */
-        jQuery(this).parents('.tabcontainer').children('.controls-wrapper').find('select, input').each(function (index, elem){
-            
-            if (jQuery(elem)[0].nodeName === "SELECT" && jQuery(elem).val()) {
+        if( !notLoggedin ){
 
-                if( !is_compare )
-                input_values['model'] = jQuery(elem).val();
-                else{
+            var element = jQuery(this);
+            var graph_data = jQuery('body').data('graph_data');
+            var input_values = new Object();
+            var axis_names = new Array('');
+            var temp = new Array();
+            var title = '';
+            var is_compare = jQuery('.tabs-wrapper').hasClass('compare') ? true : false;
+            var classes = jQuery(this).parents('.tabcontainer').attr('class');
+            var whichTab = classes.split(' ');
+            whichTab = whichTab[0];
 
-                    var all_select = jQuery(element).parents('.tabcontainer').find('select');
-                    var tempmode = { "0": all_select[0].value, "1":all_select[1].value, "2":all_select[2].value };
-                    input_values["model"] = tempmode;
+            /* Collect all inputs */
+            jQuery(this).parents('.tabcontainer').children('.controls-wrapper').find('select, input').each(function (index, elem){
+
+                if (jQuery(elem)[0].nodeName === "SELECT" && jQuery(elem).val()) {
+
+                    if( !is_compare )
+                    input_values['model'] = jQuery(elem).val();
+                    else{
+
+                        var all_select = jQuery(element).parents('.tabcontainer').find('select');
+                        var tempmode = { "0": all_select[0].value, "1":all_select[1].value, "2":all_select[2].value };
+                        input_values["model"] = tempmode;
+                    }
+
+                } else if (jQuery(elem).val()) {
+                    title = jQuery(elem).prev('label').text();
+                    input_values[title] = jQuery(elem).val();
                 }
+            });
 
-            } else if (jQuery(elem).val()) {
-                title = jQuery(elem).prev('label').text();
-                input_values[title] = jQuery(elem).val();
-            }
-        });
+            /* Collect all axis labels */
+            jQuery(this).parents('.tabcontainer').find('.axis-wrapper').each(function (index, elem){
+                temp = new Array();
+                temp[0] = jQuery(this).children('.ez-xaxis').text();
+                temp[1] = jQuery(this).children('.ez-yaxis').text();
+                axis_names[index] = temp;
+            });
 
-        /* Collect all axis labels */
-        jQuery(this).parents('.tabcontainer').find('.axis-wrapper').each(function (index, elem){
-            temp = new Array();
-            temp[0] = jQuery(this).children('.ez-xaxis').text();
-            temp[1] = jQuery(this).children('.ez-yaxis').text();
-            axis_names[index] = temp;
-        });
 
-        var data = {
-            action : 'graph_csv',
-            data : graph_data,
-            input_values : input_values,
-            axis_names : axis_names,
-            is_compare : is_compare
-        };
-        
-        jQuery('#ez-ajax-loader').show();
-        jQuery('#graph-msg').fadeOut();
-        
-        jQuery.ajax({
-            type: "POST",
-            url: ajaxurl,
-            dataType: 'json',
-            data: data,
-            success: function(response){
-                if (response.error === false) {
-                    window.location = response.data;
-                } else {
-                    jQuery('#graph-msg').html(response.error_msg).fadeIn();
-                }
-            },
-            error: function (error_obj, msg) {
-                console.log(error_obj);
-                jQuery('#graph-msg').html(msg).fadeIn();
-                jQuery('#ez-ajax-loader').hide();
-            }
-        }).done(function (){
-            jQuery('#ez-ajax-loader').hide();
-        });
+                var data = {
+                    action : 'graph_csv',
+                    data : graph_data,
+                    input_values : input_values,
+                    axis_names : axis_names,
+                    is_compare : is_compare
+                };
+
+                jQuery('#ez-ajax-loader').show();
+                jQuery('#graph-msg').fadeOut();
+
+                jQuery.ajax({
+                    type: "POST",
+                    url: ajaxurl,
+                    dataType: 'json',
+                    data: data,
+                    success: function(response){
+                        if (response.error === false) {
+                            window.location = response.data;
+                        } else {
+                            jQuery('#graph-msg').html(response.error_msg).fadeIn();
+                        }
+                    },
+                    error: function (error_obj, msg) {
+                        console.log(error_obj);
+                        jQuery('#graph-msg').html(msg).fadeIn();
+                        jQuery('#ez-ajax-loader').hide();
+                    }
+                }).done(function (){
+                    jQuery('#ez-ajax-loader').hide();
+                });
+
+        }else{
+
+            jQuery('.pop-ups').fadeIn('fast', function(){
+                jQuery('#no-logged-in').fadeIn('slow');
+                overlayHide();
+            });
+
+        }
+
     });
 
     /* Close popup function */

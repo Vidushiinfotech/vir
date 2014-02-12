@@ -4,6 +4,15 @@ jQuery(document).ready( function() {
     jQuery('.action-buttons .download-pdf').on('click', function(e) {
 
         e.preventDefault();
+        var notLoggedin    =   ( jQuery(this).parents('.action-buttons').hasClass('not-logged-in') ) ? true : false;
+
+        if( notLoggedin ){
+            jQuery('.pop-ups').fadeIn('fast', function(){
+                jQuery('#no-logged-in').fadeIn('slow');
+                overlayHide();
+            });
+            return false;
+        }
 
         var isAnalyze   =   jQuery(this).parents('section.analyze');
         var isCompare   =   jQuery(this).parents('section.compare');
