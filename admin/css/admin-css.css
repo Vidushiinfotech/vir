@@ -26,6 +26,9 @@ q:before,q:after { content:''; }
 
 abbr,acronym { border:0; }
 
+::selection {color:white;background:#8B008B;}
+::-moz-selection {color:white; background:#8B008B;}
+
 /* Clearfix */
 .clearfix:before,
 .clearfix:after { content: ""; display: table; } 

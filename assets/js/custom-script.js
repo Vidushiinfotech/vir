@@ -327,33 +327,29 @@ jQuery(document).ready(function (){
 
     /* Captcha refresh script */
     jQuery('.captcha-fresh').on('click', function(){
-        
+
         var element = jQuery(this);
         var ajaxdata = {
             action: 'refresh_captcha'
         };
-        
+
         jQuery.post( ajaxurl, ajaxdata, function(res){
             var a = jQuery(res).attr('src')
             jQuery(element).prev().attr('src', a);
-            
+ 
         });
-        
     });
-    
 
     /* Recommend csv download */
     jQuery('.download-recommend-csv').on('click', function(e){
 
         e.preventDefault();
         var data = jQuery('body').data('recommend');
-        
-        console.log(data)
 
         if( typeof data !== 'undefined' ){
-            
+
             var ajaxdata = {
-                
+
               action: 'recommend_csv',
               data: data
 

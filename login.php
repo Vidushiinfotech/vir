@@ -50,7 +50,7 @@ get_site_header(); ?>
             </div>
 
             <div class="field clearfix cform-field">
-                <input id="cform-submit" name="login_submit" type="submit" value="Submit">  
+                <input id="login_form" name="login_submit" type="submit" value="Submit">  
             </div>
 
         </form><?php

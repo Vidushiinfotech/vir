@@ -425,16 +425,17 @@ function vit_get_all_models(){
  */
 function vit_render_input( $span_class = 'control', $ip_name='default', $label = '', $sup = '', $sub = '', $content = '', $inputClass= 'igbt-input', $default_value = '', $title='' ){ ?>
 
-    <span class="<?php echo $span_class ?>"><?php
+    <span class="<?php echo $span_class ?> relative-ipcontainer"><?php
         $title = strip_tags($title);
         if ($title == '')
             $title = strip_tags($label);
-    
+
         if ($label != '')
             echo '<label title="'. $title .'">' . $label . '</label>'; ?>
-        
+
         <input title="<?php echo $title; ?>" data-default="<?php echo $default_value; ?>" class="<?php echo $inputClass ?>" type="text" name="<?php echo $ip_name ?>" value="">
         <span class="parametric"><?php if( isset( $sup ) && $sup != '' ){ ?><sup><?php echo $sup ?></sup><?php } ?><?php echo $content ?><?php if( !empty( $sub ) ){ ?><sub><?php echo $sub ?></sub><?php } ?></span>
+        <span class="static-label"><?php echo $label; ?></span>
     </span><?php
 
 }
@@ -1395,7 +1396,7 @@ function calculate_i_vs_f( $args = array() ) {
                 $plossTj = ( ( $myD / 100 ) * ( $VcoenTj * $myI ) ) + ( ( $myvdc / $vref ) * ( $EtsTj * $frequency * 1000 / 1000000 ) );
 
                 //$calculatedTj = ( $rthjc * $myrthcs ) * $plossTj * $tsink;
-                $calculatedTj = ( $rthjc + $myrthcs ) * $plossTj * $tsink;
+                $calculatedTj = ( $rthjc + $myrthcs ) * $plossTj + $tsink;
 
                 array_push( $allTjs, $calculatedTj );
                 array_push( $allCurrents, $myI );
