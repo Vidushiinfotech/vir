@@ -1514,7 +1514,10 @@ function fill_default_values(wrapper_obj) {
 function validate_value(element) {
     var value = jQuery(element).val();
     var parent_span = jQuery(element).parent('span');
-    
+
+    if( (jQuery.trim(value) !== '') && jQuery(parent_span).hasClass('intonly') )
+        value = '0'+value;
+
     /* For rounding of integers */
     if (jQuery(parent_span).hasClass('round')) {
         if( jQuery.trim( value ) !== '' ){

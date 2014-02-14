@@ -209,14 +209,14 @@ if( $_POST['action'] == 'cform_submit' || $_POST['action'] == 'report_bug' ){
     require_once './external-libs/PHPMailer/class.phpmailer.php';
 
     $cform  =   ( $_POST['action'] == 'cform_submit' ) ? true : false;
-    //$cform  =   ( $_POST['action'] == 'cform_submit' ) ? 'cform' : 'bug';
+    $defectedTab    =   empty($_POST['defectedpart']) ? 'Unknown' : $_POST['defectedpart'];
 
     if( $cform ):
         $fname      =   empty( $_POST['fname'] ) ? '' : $_POST['fname'];
         $lname      =   empty( $_POST['lname'] ) ? '' : $_POST['lname'];
     endif;
         $email      =   empty( $_POST['mail'] ) ? 'anonymous@igbt.com' : $_POST['mail'];
-        $sbjct      =   'Contact Us Request';
+        $sbjct      =   empty( $cform ) ? 'Bug Report - IGBT' : 'IGBT contact form';
         $message    =   empty( $_POST['msg'] ) ? '' : $_POST['msg'];
         
     if( !$cform )
@@ -273,8 +273,10 @@ if( $_POST['action'] == 'cform_submit' || $_POST['action'] == 'report_bug' ){
             $mail_HTML  =   str_replace('[igbt-mail]' , $email, $mail_HTML );
             $mail_HTML  =   str_replace('[igbt-msg]'  , $message, $mail_HTML );
 
-        if( !$cform )//[igbt-issue]
+        if( !$cform ){
             $mail_HTML  =   str_replace( '[igbt-issue]' , $issue, $mail_HTML );
+            $mail_HTML  =   str_replace( '[igbt-defected]' , $defectedTab, $mail_HTML );
+        }
 
         $subject    =   $sbjct;
         $toSend     =   $email;

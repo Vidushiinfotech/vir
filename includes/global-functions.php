@@ -435,7 +435,6 @@ function vit_render_input( $span_class = 'control', $ip_name='default', $label =
 
         <input title="<?php echo $title; ?>" data-default="<?php echo $default_value; ?>" class="<?php echo $inputClass ?>" type="text" name="<?php echo $ip_name ?>" value="">
         <span class="parametric"><?php if( isset( $sup ) && $sup != '' ){ ?><sup><?php echo $sup ?></sup><?php } ?><?php echo $content ?><?php if( !empty( $sub ) ){ ?><sub><?php echo $sub ?></sub><?php } ?></span>
-        <span class="static-label"><?php echo $label; ?></span>
     </span><?php
 
 }
@@ -1124,14 +1123,14 @@ function calculate_heat_sink( $args = array() ){
 
         }
 
-
         $plosses = array_reverse($plosses);
 
         /* Now calculate RTHSA for each Ploss point */
         foreach( $plosses as $ploss ){
 
             $plottinfPoints[0]  =   $ploss[0];  
-            $plottinfPoints[1]  =   ( $tSink - $tAmb )/$ploss[1];
+            $rthca              =   ( $tSink - $tAmb )/$ploss[1];
+            $plottinfPoints[1]  =   ($rthca - $myRthcs);
 
             $plot[] = $plottinfPoints;
 

@@ -63,6 +63,24 @@
                                 <li><input type="radio" value="Downloaded files do not match" name="bugradio" />Downloaded files do not match</li>
                                 <li><input type="radio" value="Other" name="bugradio" />Other</li>
                             </ul>
+
+                            <div class="part-select">
+                                <label for="defected-part">Where the bug has occured ?</label>
+                                <select id="defected-part">
+                                    <option value="Analyse Vce and Ets at my Tj">Analyse Vce and Ets at my Tj</option>
+                                    <option value="Ploss vs freq at my Tj and D">Ploss vs freq at my Tj and D</option>
+                                    <option value="What heatsink Rth do I need?">What heatsink Rth do I need?</option>
+                                    <option value="Show me the split in losses">Show me the split in losses</option>
+                                    <option value="Calculate I vs f curve">Calculate I vs f curve</option>
+                                    <option value="Compare IGBTs for Vce and Ets at my Tj">Compare IGBTs for Vce and Ets at my Tj</option>
+                                    <option value="Compare Ploss vs frequency for 3 IGBTs at my Tj and D">Compare Ploss vs frequency for 3 IGBTs at my Tj and D</option>
+                                    <option value="What heatsink Rth do I need for the 3 IGBTs?">What heatsink Rth do I need for the 3 IGBTs?</option>
+                                    <option value="Compare the split in losses for the IGBTs">Compare the split in losses for the IGBTs</option>
+                                    <option value="Compare I vs f curve">Compare I vs f curve</option>
+                                    <option value="Recommend">Recommend</option>
+                                </select>
+                            </div>
+
                         </div>
 
                         <div class="and-or">
@@ -107,6 +125,7 @@
                                 <p>The feature you have chosen is in development. It will be available soon...</p>
                                 <p>you can choose to 'Subscribe to Updates' to be notified when it is ready.</p>
                             </div>
+
                             <div class="center"><!--#14ABF1-->
                                 <p><input class="coming-updates-email" placeholder="Email id" type="email" name="subemail" value="" /></p>
                                 <p>

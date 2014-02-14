@@ -129,15 +129,15 @@ jQuery(document).ready(function (){
     }
 
     /* Popup scripts */
-    jQuery('.report-bug').on('click', function(e){
+    jQuery('a.report-bug').on('click', function(e){
 
         e.preventDefault();
 
-        var notLoggedin    =   ( jQuery(this).parents('.action-buttons').hasClass('not-logged-in') ) ? false : true;
+        var notLoggedin    =   ( jQuery(this).parents('.action-buttons').hasClass('not-logged-in') ) ? true : false;
 
         jQuery('.pop-ups').fadeIn('fast', function(){
 
-            (notLoggedin) ? jQuery('#report-popup').fadeIn('slow') : jQuery('#no-logged-in').fadeIn('slow');
+            (!notLoggedin) ? jQuery('#report-popup').fadeIn('slow') : jQuery('#no-logged-in').fadeIn('slow');
             overlayHide();
 
         });
@@ -162,6 +162,7 @@ jQuery(document).ready(function (){
         var which_issue =   jQuery('input:radio[name=bugradio]:checked').val();
         var issue_msg   =   jQuery.trim( jQuery('textarea[name="describe_text"]').val() );
         var issue_email =   jQuery.trim( jQuery('input[name="report-myemail"]').val() );
+        var defected_part   =   jQuery("#defected-part").val();
 
         var ajaxdata    =   {
 
@@ -169,7 +170,8 @@ jQuery(document).ready(function (){
             subject : 'EzIGBT - A bug has been reported',
             issue: which_issue,
             msg: issue_msg,
-            mail: issue_email
+            mail: issue_email,
+            defectedpart:defected_part
 
         };
 

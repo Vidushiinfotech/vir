@@ -250,7 +250,7 @@ body.cms-page { font-size: 14px; color: #333; line-height: 20px; }
 
 /* Popup stylings */
 .pop-ups, #report-popup, #pdf-popup, #csv-popup, #samples-popup { display: none; }
-#report-popup, #samples-popup, #no-logged-in { position: fixed; top: 0;z-index: 999;left: 0;background: rgba(51, 51, 51, 0.83); width: 100%;height: 100%; opacity: 1; }
+#report-popup, #samples-popup, #no-logged-in { display: none; position: fixed; top: 0;z-index: 999;left: 0;background: rgba(51, 51, 51, 0.83); width: 100%;height: 100%; opacity: 1; }
     .report-popup-inside { width: 700px;position: absolute;top: 12%;left: 50%;margin-left: -368px;background: #FFF;padding: 15px;border: 3px solid #74c2e4; }
     .popup-header { position: relative;margin-bottom: 20px;border-bottom: 1px solid #333;padding-bottom: 20px; }
     .popup-header .head-part { width: 25%; float: left  }
@@ -295,6 +295,5 @@ body.cms-page { font-size: 14px; color: #333; line-height: 20px; }
 .recommend .graph-holder { position: relative }
 .recommend .action-buttons { position: absolute;width: 100%;bottom: 0px; left: 15px; }
 
-/*  */
-.relative-ipcontainer { position: relative }
-    .static-label { left: 40px;position: absolute;top: -30px; color: #333 }
+.part-select { margin-top: 30px; }
+    label[for="defected-part"] { margin-bottom: 10px; display: inline-block }
