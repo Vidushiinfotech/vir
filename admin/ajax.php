@@ -283,16 +283,17 @@ if( $_POST['action'] == 'cform_submit' || $_POST['action'] == 'report_bug' ){
 
         $mail = new PHPMailer();
 
-        $mail->IsSMTP();
+        //$mail->IsSMTP();
         $mail->Host     = EZ_SMTP_HOST;
-
         $mail->Port       =  EZ_SMTP_PORT; // set the SMTP port for the GMAIL server
-        $mail->SMTPAuth  = TRUE;
+        $mail->SMTPAuth  = true;
+        $mail->SMTPSecure = "ssl"; 
+        $mail->SMTPDebug  = 1;
         $mail->Username   = EZ_SMTP_USER; // SMTP account username
         $mail->Password   = EZ_SMTP_PASS;// SMTP account password
 
         if( $cform )
-            $mail->SetFrom($email,  $fname.' '.$lname );
+            $mail->SetFrom( $email,  $fname.' '.$lname );
         else
             $mail->SetFrom( EZ_SMTP_FROM, EZ_SMTP_REPLY_FROM_NAME );
 

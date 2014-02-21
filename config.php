@@ -5,8 +5,8 @@
  */
 
 /* set error reporting */
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+//ini_set('display_errors', 1);
+//error_reporting(E_ALL);
 //error_reporting(0);
 
 define('EZ_SLASHES', '/' );
@@ -30,26 +30,26 @@ define( 'EZ_DB_USER', 'ezigbtProdUser' );
 define( 'EZ_DB_PASS', 'DyfJjk4YzFl' );
 
 /* SMTP PORT */
-define( 'EZ_SMTP_PORT', 25 );
+define( 'EZ_SMTP_PORT', 465 );
 
 /* SMTP HOST */
-define( 'EZ_SMTP_HOST', "192.168.0.11" );
+define( 'EZ_SMTP_HOST', "smtp.gmail.com" );
 
 /* SMTP user */
-define( 'EZ_SMTP_USER', 'ankit.gade@vidushigoc.com' );
+define( 'EZ_SMTP_USER', 'ezigbt@gmail.com' );
 
 /* SMTP Password */
-define( 'EZ_SMTP_PASS', 'p@ssword' );
+define( 'EZ_SMTP_PASS', 'Goigbtgo!' );
 
 /* SMTP Reply To */
-define( 'EZ_SMTP_REPLY', 'ankit.gade@vidushigoc.com' ); // If user will reply, to whom it should go ?
+define( 'EZ_SMTP_REPLY', 'ezigbt@gmail.com' ); // If user will reply, to whom it should go ?
 
 /* SMTP Reply Name */
-define( 'EZ_SMTP_REPLY_NAME', 'Ankit Gade' );
+define( 'EZ_SMTP_REPLY_NAME', 'ezIGBT' );
 
 /* SMTP Reply FROM */
 // From which address email is getting sent, On same address you will receive all emails
-define( 'EZ_SMTP_FROM', 'ankit.gade@vidushigoc.com' );
+define( 'EZ_SMTP_FROM', 'ezigbt@gmail.com' );
 
 /* SMTP Reply FROM Name */
-define( 'EZ_SMTP_REPLY_FROM_NAME', 'Ankit Gade' );
+define( 'EZ_SMTP_REPLY_FROM_NAME', 'ezIGBT' );
