@@ -24,9 +24,9 @@ if( !empty( $_POST ) ){
         <h2>Get early access and updates</h2>
         <?php if( !empty( $_POST ) ) echo $response; ?>
         <p>Be the first to know when we add powerful tools and new IGBT’s to help you find the right IGBT for your circuit. Subscribe for updates</p>
-    <form action="." method="POST" class="sign-up-form">
-        <input required="required" name="user_email" type="email" value="" placeholder="Email Address" />
-        <input type="submit" value="Submit" id="cform-submit" />
+        <form action="." method="POST" class="sign-up-form">
+            <input required="required" name="user_email" type="email" value="" placeholder="Email Address" />
+            <input type="submit" name="subscribe_submit" value="Submit" id="subscribe_submit" />
         </form>
     </div>
 </div>

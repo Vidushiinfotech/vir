@@ -253,10 +253,11 @@ function vit_add_subscribers(){
 
         }else{
 
-            $uname = time();
-            $psw   = md5( $uname );
+            $uname =    time();
+            $psw   =    md5( $uname );
+            $ip    =    $_SERVER['REMOTE_ADDR'];
 
-            $query = "INSERT INTO users VALUES('', '$uname', '', '', '$psw', '$email', '0', '1' )";
+            $query = "INSERT INTO users VALUES( '', '$uname', '', '', '$psw', '$email', '$ip' , 'Other Application', '0', '1' )";
             $result = $EZ_DB->run_query( $query, 1 );
 
             if( empty( $result ) ){
@@ -325,6 +326,7 @@ function vit_signup(){
     $email          =   mysqli_real_escape_string( $EZ_DB->connect , $_POST['loginmail'] );
     $application    =   mysqli_real_escape_string( $EZ_DB->connect , $_POST['primary_application'] );
     $captcha        =   mysqli_real_escape_string( $EZ_DB->connect , $_POST['logincaptcha']);
+    $ip             =   $_SERVER['REMOTE_ADDR'];
 
     $error  =   '';
 
@@ -361,7 +363,7 @@ function vit_signup(){
 
     if( empty( $error ) ){
 
-        $query = "INSERT INTO users VALUES ( '', '', '', '', '',  '$email', '$application', '0', '0' )";
+        $query = "INSERT INTO users VALUES ( '', '', '', '', '',  '$email', '$ip', '$application', '0', '0' )";
 
         $res = $EZ_DB->run_query( $query );
         if( !empty( $res ) )
